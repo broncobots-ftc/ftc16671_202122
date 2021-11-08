@@ -49,7 +49,6 @@ public class MecanumDrive {
     // drive motor position variables
     private int flPos; private int frPos; private int blPos; private int brPos;
 
-
     private MatrixF conversion;
     private GeneralMatrixF encoderMatrix = new GeneralMatrixF(3, 1);
 
@@ -59,7 +58,6 @@ public class MecanumDrive {
     private int backLeftOffset;
 
     ElapsedTime runtime = new ElapsedTime();
-
 
     public MecanumDrive() {
 
@@ -85,6 +83,11 @@ public class MecanumDrive {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
+    /**
+     * Initialize all servos here.
+     *
+     * @param hwMap
+     */
     void initServo(HardwareMap hwMap){
         box = hwMap.get(Servo.class, "box");//0 - control hub
         holder = hwMap.get(Servo.class, "holder");//0 - control hub
@@ -210,6 +213,15 @@ public class MecanumDrive {
 
     }
 
+    /**
+     * Move specific distance (in inches) backwards with specific speed.     *
+     *
+     * @param distanceInInches
+     * @param isOpModeActive
+     * @param timeoutS
+     * @param speed
+     * @param telemetry
+     */
     public void moveBackward(int distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
 
         //get current position for all motors so we can start from there
