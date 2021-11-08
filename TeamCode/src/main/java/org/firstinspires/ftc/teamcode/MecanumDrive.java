@@ -19,16 +19,8 @@ public class MecanumDrive {
     DcMotor lift;
     DcMotor carousel;
 
-    DcMotor shooterFront;
-    DcMotor shooterBack;
-
     DcMotor intake;
     DcMotor conveyor;
-
-    Servo grabber;
-    Servo wobbleArm;
-    Servo lifter;
-    Servo pusher;
 
     Servo holder;//holder for capstone
     Servo box;//box to hold cubes and balls
@@ -94,16 +86,10 @@ public class MecanumDrive {
     }
 
     void initServo(HardwareMap hwMap){
-        grabber = hwMap.get(Servo.class, "grabber");//0 - control hub
-        wobbleArm = hwMap.get(Servo.class, "wobble_arm");//4 - control hub
-        lifter = hwMap.get(Servo.class, "lifter1");//5 - control hub
-        pusher = hwMap.get(Servo.class, "pusher");//3 - ext hub
-
         box = hwMap.get(Servo.class, "box");//0 - control hub
         holder = hwMap.get(Servo.class, "holder");//0 - control hub
-
-
     }
+
     void initCarousel_and_lift(HardwareMap hwMap){
         lift = hwMap.get(DcMotor.class, "lifter");//
         carousel = hwMap.get(DcMotor.class, "carousel");
@@ -113,9 +99,7 @@ public class MecanumDrive {
 
     void initIntake(HardwareMap hwMap){
         intake = hwMap.get(DcMotor.class, "intake");
-
     }
-
 
     void setAllMotorsToRunToPosition() {
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -129,26 +113,10 @@ public class MecanumDrive {
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooterFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        shooterBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
     }
 
     void setSpeeds(double flSpeed, double frSpeed, double blSpeed, double brSpeed) {
         double largest = maxSpeed;
-        /*
-        largest = Math.max(largest, Math.abs(flSpeed));
-        largest = Math.max(largest, Math.abs(frSpeed));
-        largest = Math.max(largest, Math.abs(blSpeed));
-        largest = Math.max(largest, Math.abs(brSpeed));
-
-        frontLeft.setPower(flSpeed / largest);
-        frontRight.setPower(frSpeed / largest);
-        backLeft.setPower(blSpeed / largest);
-        backRight.setPower(brSpeed / largest);
-        */
-
 
         frontLeft.setPower(flSpeed);
         frontRight.setPower(frSpeed);
@@ -159,11 +127,6 @@ public class MecanumDrive {
     void driveMecanum(double forward, double strafe, double rotate) {
         //watch following site to get more details on different options on how to move motors
         //https://stemrobotics.cs.pdx.edu/node/4746
-
-        //double frontLeftSpeed = forward - strafe + rotate;
-        //double frontRightSpeed = forward - strafe - rotate;
-        //double backLeftSpeed = forward + strafe + rotate;
-        //double backRightSpeed = forward + strafe - rotate;
 
         double frontLeftSpeed = forward - strafe + rotate;
         double frontRightSpeed = forward - strafe - rotate;
@@ -435,8 +398,6 @@ public class MecanumDrive {
 
 
     public void moveBasedOnTotalRings(int totalRings, Telemetry telemetry) {
-        //setting pusher position
-        pusher.setPosition(0.64);
         //First step drive 3 inches foward
         moveForward(18, true, 5, fast, telemetry);
         //straif left 21 inches
@@ -503,7 +464,7 @@ public class MecanumDrive {
 
     public void moveBasedOnTotalRingsForTowerGoal(int totalRings, Telemetry telemetry) {
         //setting pusher position
-        pusher.setPosition(0.64);
+        //pusher.setPosition(0.64);
         //running intake backwards to spread out rings
         if (totalRings == 4){
             runIntake(0.7);
@@ -619,14 +580,7 @@ public class MecanumDrive {
             strafeRightMoveForwardBasedOnRings(totalRings, 38, 36, telemetry);
             //rotate
             rotateRight(10,true,5,fast,telemetry);
-            //
-            //putWobbelArmDown();
-            //
-            //releaseWobble();
-            //
-            //moveBackward(10, true, 5, fast, telemetry);
-            //
-            //putWobbelArmUp();
+
 
         }
     }
@@ -641,7 +595,6 @@ public class MecanumDrive {
     public void parkOnLineBasedOnRings(int totalRings, Telemetry telemetry){
         if(totalRings==0){
             double armPosition = .8;
-            wobbleArm.setPosition(armPosition);
             sleep(500);
             //Strafe left about 18 inches
             strafeLeft(33,true,5,fast,telemetry);
@@ -649,7 +602,6 @@ public class MecanumDrive {
             moveForward(7,true,5,fast,telemetry);
         }else if (totalRings==1){
             double armPosition = .8;
-            wobbleArm.setPosition(armPosition);
             sleep(0);
             //Move backward 6 inches
             moveBackward(8, true,5,fast,telemetry);
@@ -660,7 +612,6 @@ public class MecanumDrive {
             //Move backward 30 inches
             moveBackward(31,true,5,fast,telemetry);
             double armPosition = .8;
-            wobbleArm.setPosition(armPosition);
             sleep(0);
         }
     }
@@ -678,24 +629,23 @@ public class MecanumDrive {
 
     public void grabWobble(){
         double grabberPosition = 0.0;
-        grabber.setPosition(grabberPosition);
     }
 
     public void releaseWobble(){
         double grabberPosition = 0.4;//0.4-0.25
-        grabber.setPosition(grabberPosition);
+        //grabber.setPosition(grabberPosition);
         sleep(0);
     }
 
     public void putWobbelArmDown(){
         double armPosition = 0.2;
-        wobbleArm.setPosition(armPosition);
+        //wobbleArm.setPosition(armPosition);
         sleep(2000);
     }
 
     public void putWobbelArmUp(){
         double armPosition = .35;
-        wobbleArm.setPosition(armPosition);
+        //wobbleArm.setPosition(armPosition);
         sleep(0);
     }
 
@@ -708,37 +658,37 @@ public class MecanumDrive {
     }
 
     public void runShooterFront(double shooterFrontPower){
-        shooterFront.setPower(shooterFrontPower);
+        //shooterFront.setPower(shooterFrontPower);
     }
 
     public void runShooterBack(double shooterBackPower){
-        shooterBack.setPower(shooterBackPower);
+        //shooterBack.setPower(shooterBackPower);
     }
 
     public void moveWobbleArmUp() {
-        wobbleArm.setPosition(0);
+        //wobbleArm.setPosition(0);
     }
     public void moveWobbleArmDown() {
-        wobbleArm.setPosition(1.0);
+        //wobbleArm.setPosition(1.0);
     }
     public void moveLifter() {
-        lifter.setPosition(0);
+        //lifter.setPosition(0);
     }
     public void moveLifter(double lifterPosition) {
-        lifter.setPosition(lifterPosition);
+        //lifter.setPosition(lifterPosition);
     }
     public void moveLifterDown() {
-        lifter.setPosition(1.0);
+        //lifter.setPosition(1.0);
     }
 
 
     public void liftUp() {
-        lifter.setDirection(Servo.Direction.FORWARD);
-        lifter.setPosition(0.5);
+        //lifter.setDirection(Servo.Direction.FORWARD);
+        //lifter.setPosition(0.5);
     }
     public void liftDown() {
-        lifter.setDirection(Servo.Direction.FORWARD);
-        lifter.setPosition(0.5);
+        //lifter.setDirection(Servo.Direction.FORWARD);
+        //lifter.setPosition(0.5);
     }
 
     /**
@@ -828,12 +778,7 @@ public class MecanumDrive {
            //
            moveForward(64, true, 10, medium, telemetry);//64-62-66-64
 
-
-
            moveBackward(2, true, 5, fast, telemetry);
-
-
-
        }
     }
 
@@ -879,14 +824,13 @@ public class MecanumDrive {
         // Move the lifter up
         moveLifter(lifterPosition);
 
-
     }
 
    public void pushRingForwardBack(){
 
-        pusher.setPosition(0);// used to be zero changed on 3-20  it is a forward position
+        //pusher.setPosition(0);// used to be zero changed on 3-20  it is a forward position
         sleep(500);
-        pusher.setPosition(0.7); // back position is 0.64
+        //pusher.setPosition(0.7); // back position is 0.64
    }
 
 

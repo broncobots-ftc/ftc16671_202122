@@ -269,15 +269,9 @@ public class AutonomusMode extends LinearOpMode {
                 }
             }
         }
-
         if (tfod != null) {
             tfod.shutdown();
         }
     }
-
-
-
-
-
 
 }
