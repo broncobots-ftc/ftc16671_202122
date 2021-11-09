@@ -56,9 +56,9 @@ public class MecanumDriveOpMode extends OpMode {
             if(lifterPosition > 0.2) {
                 lifterPosition -= SERVO_OFFSET;
             }
-            mecanumDrive.lifter.setPosition(Range.clip(lifterPosition, MIN_POSITION, MAX_POSITION));
-            telemetry.addData("lifter servo", "position=" + lifterPosition + "  actual="
-                    + mecanumDrive.lifter.getPosition());
+            //mecanumDrive.lifter.setPosition(Range.clip(lifterPosition, MIN_POSITION, MAX_POSITION));
+            //telemetry.addData("lifter servo", "position=" + lifterPosition + "  actual="
+            //        + mecanumDrive.lifter.getPosition());
         }
         //setting power for carousel and lifter
         /*
@@ -96,7 +96,26 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //left bumper is 0 to 1, right bumper is 1 to 0
+        if(gamepad2.left_bumper){
+            telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.lift.setTargetPosition(400);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            mecanumDrive.lift.setPower(0.2);
+            telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
 
+        }
+        if(gamepad2.right_bumper){
+            telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.lift.setTargetPosition(0);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            mecanumDrive.lift.setPower(0.2);
+            telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
+
+        }
+        if(gamepad2.left_stick_y > 0) {
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            mecanumDrive.lift.setPower(gamepad2.left_stick_y);
+        }
 
 
 
