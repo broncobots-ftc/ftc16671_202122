@@ -1,4 +1,6 @@
 ## TeamCode Module
+## Manav has access and he can commit and push as well
+## Brendan has access as well.
 
 Welcome FTC 16671 Team,
 
