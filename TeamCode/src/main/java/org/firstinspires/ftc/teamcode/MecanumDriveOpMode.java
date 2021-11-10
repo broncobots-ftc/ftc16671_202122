@@ -18,7 +18,7 @@ public class MecanumDriveOpMode extends OpMode {
     public void init() {
         mecanumDrive.init(hardwareMap);
         mecanumDrive.initCarousel_and_lift(hardwareMap);
-        //mecanumDrive.initServo(hardwareMap);
+        mecanumDrive.initServo(hardwareMap);
         mecanumDrive.initIntake(hardwareMap);
 
     }
@@ -100,22 +100,72 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.lift.setTargetPosition(400);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(0.2);
+            mecanumDrive.lift.setPower(1);
+
+            mecanumDrive.box.setPosition(0.9);
+
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
 
         }
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-            mecanumDrive.lift.setTargetPosition(0);
+            mecanumDrive.lift.setTargetPosition(20);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(0.2);
+            mecanumDrive.lift.setPower(1);
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
 
         }
-        if(gamepad2.left_stick_y > 0) {
-            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mecanumDrive.lift.setPower(gamepad2.left_stick_y);
+        //this should go to 400 when position is already up (more than 400, possibly 800,1200 or 1600)
+        if(gamepad2.a) {
+            if (mecanumDrive.lift.getCurrentPosition() >= 400) {
+                //telemetry.addData("A position", "=" + mecanumDrive.intake.getCurrentPosition());
+                mecanumDrive.lift.setTargetPosition(400);
+                mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                mecanumDrive.lift.setPower(1);
+
+                mecanumDrive.box.setPosition(1);
+                //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
+                telemetry.addData("A position", "=" + mecanumDrive.lift.getCurrentPosition());
+            }
         }
+        //
+        if(gamepad2.b) {
+            //if (mecanumDrive.lift.getCurrentPosition() >= 400) {
+                telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+                mecanumDrive.lift.setTargetPosition(800);
+                mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                mecanumDrive.lift.setPower(1);
+
+                mecanumDrive.box.setPosition(1);
+                //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
+                telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            //}
+        }
+        if(gamepad2.x) {
+            //if (mecanumDrive.lift.getCurrentPosition) >= 400) {
+            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            mecanumDrive.lift.setTargetPosition(1200);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            mecanumDrive.lift.setPower(1);
+
+            mecanumDrive.box.setPosition(1);
+            //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
+            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            //}
+        }
+        if(gamepad2.y) {
+            //if (mecanumDrive.lift.getCurrentPosition) >= 400) {
+            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            mecanumDrive.lift.setTargetPosition(1800);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            mecanumDrive.lift.setPower(1);
+            //
+            mecanumDrive.box.setPosition(0);
+            //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
+            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            //}
+        }
+
 
 
 
@@ -141,7 +191,8 @@ public class MecanumDriveOpMode extends OpMode {
      *
      * @param miliseconds
      */
-    private void justWait(int miliseconds){
+
+    private void justWait(int miliseconds) {
 
         double currTime = getRuntime();
         double waitUntil = currTime + (double)(miliseconds/1000);
