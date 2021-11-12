@@ -73,102 +73,132 @@ public class MecanumDriveOpMode extends OpMode {
         if (gamepad1.left_trigger > 0){
             //mecanumDrive.intake.setTargetPosition(4000000);
             mecanumDrive.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mecanumDrive.runIntake(gamepad1.left_trigger);//take it in
+            mecanumDrive.runIntake(-gamepad1.left_trigger);//take it in
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         if (gamepad1.right_trigger > 0){
             //mecanumDrive.intake.setTargetPosition(-4000000);
             mecanumDrive.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mecanumDrive.runIntake(-gamepad1.right_trigger);//take it in
+            mecanumDrive.runIntake(gamepad1.right_trigger);//take it in
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         // Ww will move carousel colckwise and anitclockwise using gamepad 2 triggers
-        if (gamepad2.left_trigger > 0){
+        if (gamepad1.left_bumper){
             //mecanumDrive.intake.setTargetPosition(4000000);
-            mecanumDrive.carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mecanumDrive.carousel.setPower(gamepad2.left_trigger);//take it in
-            telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.carousel.setPower(0.5);
+            telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
-        if (gamepad2.right_trigger > 0){
+        if (gamepad1.right_bumper){
             //mecanumDrive.intake.setTargetPosition(-4000000);
-            mecanumDrive.carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mecanumDrive.carousel.setPower(-gamepad2.right_trigger);//take it in
-            telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.carousel.setPower(-0.5);
+            telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
+        }
+
+        if(gamepad1.right_bumper && gamepad1.left_bumper){
+            mecanumDrive.carousel.setPower(0);
         }
         //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.left_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-            mecanumDrive.lift.setTargetPosition(400);
+            mecanumDrive.lift.setTargetPosition(500);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(1);
-
+            mecanumDrive.lift.setPower(0.8);
             mecanumDrive.box.setPosition(0.9);
-
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-
         }
+        //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.box.setPosition(1);
+            //wait for some milliseconds
+            justWait(1500);
             mecanumDrive.lift.setTargetPosition(20);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(1);
+            mecanumDrive.lift.setPower(0.8);
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
 
         }
-        //this should go to 400 when position is already up (more than 400, possibly 800,1200 or 1600)
+        //this should go to 500 when position is already up (more than 400, possibly 800,1200 or 1600)
         if(gamepad2.a) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
-                //telemetry.addData("A position", "=" + mecanumDrive.intake.getCurrentPosition());
-                mecanumDrive.lift.setTargetPosition(400);
+                telemetry.addData("A position", "=" + mecanumDrive.intake.getCurrentPosition());
+                mecanumDrive.lift.setTargetPosition(500);
                 mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 mecanumDrive.lift.setPower(1);
 
-                mecanumDrive.box.setPosition(1);
+                mecanumDrive.box.setPosition(0.66);
                 //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
                 telemetry.addData("A position", "=" + mecanumDrive.lift.getCurrentPosition());
             }
         }
-        //
+        //this should go to 900 position b
         if(gamepad2.b) {
-            //if (mecanumDrive.lift.getCurrentPosition() >= 400) {
+            if (mecanumDrive.lift.getCurrentPosition() >= 400) {
                 telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-                mecanumDrive.lift.setTargetPosition(800);
+                mecanumDrive.lift.setTargetPosition(900);
                 mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 mecanumDrive.lift.setPower(1);
 
-                mecanumDrive.box.setPosition(1);
+                mecanumDrive.box.setPosition(0.66);
                 //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
                 telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            //}
+            }
         }
+
         if(gamepad2.x) {
-            //if (mecanumDrive.lift.getCurrentPosition) >= 400) {
-            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            mecanumDrive.lift.setTargetPosition(1200);
+            if (mecanumDrive.lift.getCurrentPosition() >= 400) {
+            telemetry.addData("X Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            mecanumDrive.lift.setTargetPosition(1600);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(1);
 
-            mecanumDrive.box.setPosition(1);
+            mecanumDrive.box.setPosition(0.66);
             //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
-            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            //}
+            telemetry.addData("X Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            }
         }
         if(gamepad2.y) {
-            //if (mecanumDrive.lift.getCurrentPosition) >= 400) {
-            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            mecanumDrive.lift.setTargetPosition(1800);
-            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(1);
-            //
-            mecanumDrive.box.setPosition(0);
-            //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
-            telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            //}
+            if (mecanumDrive.lift.getCurrentPosition() >= 400) {
+                telemetry.addData("Y Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+                mecanumDrive.lift.setTargetPosition(1800);
+                mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                mecanumDrive.lift.setPower(1);
+
+                mecanumDrive.box.setPosition(0.66);
+                //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
+                telemetry.addData("Y Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+            }
         }
 
+        //Dump function - press and hold GP2 RH bumper to dump, release and it goes back
+        if (mecanumDrive.lift.getCurrentPosition() >= 450) {
+            if (gamepad2.dpad_down) {
+                mecanumDrive.box.setPosition(0);
+                //wait here for some milliseconds
+                justWait(1500);
+                mecanumDrive.box.setPosition(0.66);
+            }
+            if (gamepad2.dpad_up) {
+                mecanumDrive.box.setPosition(0);
+                //wait here for some milliseconds
+            }
+            //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
+            telemetry.addData("box Position", "position=" + mecanumDrive.lift.getCurrentPosition());
+        }
 
+        if (mecanumDrive.lift.getCurrentPosition() >= 450) {
+            if (gamepad2.dpad_right) {
+                mecanumDrive.holder.setPosition(0);
 
+            }
+        }
 
+        if (mecanumDrive.lift.getCurrentPosition() >= 450) {
+            if (gamepad2.dpad_left) {
+                mecanumDrive.holder.setPosition(0.3);
+
+            }
+        }
 
 
         //carousel is right joystick up and down, lift is left joystick up and down

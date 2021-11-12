@@ -97,7 +97,7 @@ public class MecanumDrive {
         lift = hwMap.get(DcMotor.class, "lifter");//
         carousel = hwMap.get(DcMotor.class, "carousel");
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        carousel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     void initIntake(HardwareMap hwMap){
