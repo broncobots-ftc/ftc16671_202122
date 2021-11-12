@@ -30,15 +30,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
@@ -55,9 +52,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Autonomus Mode", group = "ftc16671")
-@Disabled
-public class AutonomusMode extends LinearOpMode {
+@Autonomous(name = "New Autonomus Mode", group = "ftc16671")
+
+public class AutonomusMode2021 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
@@ -236,36 +233,30 @@ public class AutonomusMode extends LinearOpMode {
                             tfod.shutdown();
                         }
                     }
-                    mecanumDrive.grabWobble();
-                    /**
-                     * detect rings and store that in variable
-                     * move 3 inches forward
-                     * strafe left 21 inches
-                     * start shooter motors
-                     * lift shooter up
-                     * push ring 1
-                     * strafe left 7.5 inches
-                     * push ring 2
-                     * strafe left 7.5 inches
-                     * push ring 3
-                     * stop shooter motors
-                     * put shooter down
-                     * move according to ring detection
-                     * release wobble
-                     * move back to parking line
+                    // For RED1, with front against wall
+                     // Identify location of shipping element/ducky
 
-                    **/
-                    //Create a function to move 3 inches and shoot 3 rings
-                    mecanumDrive.moveBasedOnTotalRings(totalRings, telemetry);
-                    //mecanumDrive.moveGrabberArmToRelease();
-                    //sleep(3000);
-                    mecanumDrive.putWobbleDownUp();
-                    // Get other wobble and put in square based on homw many rings there are
-                    //Make function to move to line, depending on how many rings there are
-                    //Move to white line based on total ring , and park
-                    mecanumDrive.parkOnLineBasedOnRings(totalRings, telemetry);
-                    //sleep(2000);
-                    break;
+                    //Move backward
+                    mecanumDrive.moveBackward(12, true,5, 1, telemetry);
+                    //Strafe Right
+                    mecanumDrive.strafeRight(5,true,5, 1, telemetry);
+                    //Move backward (make sure to contact the shipping hub)
+                    mecanumDrive.moveBackward(5, true, 5, 1, telemetry);
+                     //Move lifter as
+                    mecanumDrive.moveLif
+                    // recognized by Vuforia and based on location of duck
+                    //Use dropping function
+                     // Move forwaard slightly
+                     // Strafe right
+                    //Turn 90 degrees
+                    //Make contact with carousel
+                     // Turn carousel with carousel spinner for a few secs
+                     // Strafe Right
+                     // MOve Forward
+                     // Strafe to wall
+                     // Move forward to warehouse
+
+
                 }
             }
         }

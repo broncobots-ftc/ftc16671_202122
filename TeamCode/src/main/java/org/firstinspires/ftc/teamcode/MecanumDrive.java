@@ -412,18 +412,18 @@ public class MecanumDrive {
     public void moveBasedOnTotalRings(int totalRings, Telemetry telemetry) {
         //First step drive 3 inches foward
         moveForward(18, true, 5, fast, telemetry);
-        //straif left 21 inches
+        //strafe left 21 inches
         shootPowerShots(.526);
         sleep(900);
         strafeLeft(24, true, 5,slow,telemetry);
         //lift and shoot ring power shot new function
         pushRingForwardBack();
-        //straif 8 more inches
+        //strafe 8 more inches
         strafeLeft(8, true, 5,slow,telemetry);
         //lift and shoot ring power shot
         sleep(400);
         pushRingForwardBack();
-        //straif 7 inches
+        //strafe 7 inches
         strafeLeft(8, true, 5,slow,telemetry);
         //Lift and shoot power shot
         sleep(400);
@@ -661,6 +661,8 @@ public class MecanumDrive {
         sleep(0);
     }
 
+
+
     public void runIntake(double intakePower){
         intake.setPower(intakePower);
     }
@@ -844,6 +846,34 @@ public class MecanumDrive {
         sleep(500);
         //pusher.setPosition(0.7); // back position is 0.64
    }
+   /*************************************************************/
+
+   public void runCarousel(double power){
+       carousel.setPower(power);
+   }
+
+    public void dumpAndBringbackBox(){
+     box.setPosition(0);
+     sleep(3000);
+     box.setPosition(1);
+    }
+
+    public void dumpBox(){
+        box.setPosition(0);
+    }
+
+   public void bringBoxBack(){
+       box.setPosition(1);
+   }
+
+   public void moveLiftUp(int targetPosition, double power){
+       lift.setTargetPosition(targetPosition);
+       lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       lift.setPower(power);
+   }
+
+
+
 
 
 
