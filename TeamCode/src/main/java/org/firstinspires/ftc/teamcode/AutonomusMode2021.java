@@ -73,7 +73,7 @@ public class AutonomusMode2021 extends LinearOpMode {
     static final int fourRingsMinHeight = 240;
     static final int fourRingsMaxHeight = 340;
 
-    static final int SECONDS_TO_RUN_RING_DETECTION_FOR = 0;
+    static final int SECONDS_TO_DETECT_OBJECT = 0;
 
     private MecanumDrive mecanumDrive = new MecanumDrive();
     private ElapsedTime runtime = new ElapsedTime();
@@ -129,52 +129,11 @@ public class AutonomusMode2021 extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    /**
-     *
-     * let's detect rings based on height of the object.
-     * @param totalHeight
-     * @return int - number of rings
-     */
-    private int detectRings(float totalHeight, String totalRingsLabel){
-        int totalRings = 0;
-        /*
-        if(totalHeight > oneRingMinHeight && totalHeight <= oneRingMaxHeight){
-            //telemetry.addLine("1 Ring Found (%d)");
-            totalRings = 1;
-        }else if(totalHeight > fourRingsMinHeight && totalHeight < fourRingsMaxHeight){
-            //telemetry.addLine("4 Rings Found (%d)");
-            totalRings = 4;
-        }else if(totalHeight > fourRingsMaxHeight){
-            //telemetry.addLine("Ignore this.. (%d)");
-        }else {
-            //telemetry.addLine("0 Rings Found (%d)");
-        }
-         */
-        if(LABEL_SECOND_ELEMENT.equals(totalRingsLabel)){
-            totalRings = 1;
-        }else if(LABEL_FIRST_ELEMENT.equals(totalRingsLabel)){
-            totalRings = 4;
-        }else{
-            totalRings = 0;
-        }
-        return totalRings;
-    }
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //check following youtube link for detailed navigation
-        //https://www.youtube.com/watch?v=gbcdveLP-Ns
-        //https://www.youtube.com/watch?v=kZS4cmVRGzI
-        //https://www.youtube.com/watch?v=1712u-KmE6I
-        //To understand more about run using encoder or run to position - look at this -
-        //https://stemrobotics.cs.pdx.edu/node/4746
-        //Get the code from samples - ConceptVuforiaUltimateGoalNavigationWebcam
-        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
-        //This is pretty good - https://www.youtube.com/watch?v=AxKrJEtfuaI
-        //github link - https://github.com/gearsincorg/FTCVuforiaDemo
-        //
+
         initVuforia();
         initTfod();
         mecanumDrive.init(hardwareMap);
@@ -186,10 +145,6 @@ public class AutonomusMode2021 extends LinearOpMode {
          **/
         if (tfod != null) {
             tfod.activate();
-            // For best results, the "aspectRatio" argument
-            // should be set to the value of the images used to create the TensorFlow Object Detection model
-            // (typically 1.78 or 16/9).
-            // Uncomment the following line if you want to adjust the magnification and/or the aspect ratio of the input images.
             tfod.setZoom(1.2, 1.78);
             //tfod.setZoom(1, 16.0/9.0);
         }
@@ -207,7 +162,7 @@ public class AutonomusMode2021 extends LinearOpMode {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     float seconds = (end - start) / 1000F;
-                    while(seconds <= SECONDS_TO_RUN_RING_DETECTION_FOR) {
+                    while(seconds <= SECONDS_TO_DETECT_OBJECT) {
                         telemetry.addData("# seconds passed : ", seconds);
                         telemetry.update();
                         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -225,7 +180,7 @@ public class AutonomusMode2021 extends LinearOpMode {
                                 telemetry.addData(String.format("Total rings height (%d)", i), "%.03f", recognition.getHeight());
                                 telemetry.update();
                                 float totalHeight = recognition.getHeight();
-                                totalRings = detectRings(totalHeight, recognition.getLabel());
+
                             }
                             telemetry.update();
 
@@ -243,7 +198,7 @@ public class AutonomusMode2021 extends LinearOpMode {
                     //Move backward (make sure to contact the shipping hub)
                     mecanumDrive.moveBackward(5, true, 5, 1, telemetry);
                      //Move lifter as
-                    mecanumDrive.moveLif
+
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
                      // Move forwaard slightly
