@@ -203,12 +203,13 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 //sleep(5000);
                 //mecanumDrive.runCarousel(0);
                // mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
-
+                sleep(500);
+                mecanumDrive.box.setPosition(.66);
                 mecanumDrive.moveBackward(7, true,5, 0.4, telemetry);
                 //Strafe Right
-               // mecanumDrive.strafeRight(10,true,5, 0.4, telemetry);
+                mecanumDrive.strafeLeft(10,true,5, 0.4, telemetry);
                 //Move backward (make sure to contact the shipping hub)
-               // mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);
+                mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);
                 //Move lifter as
                 mecanumDrive.moveLiftUp(1600, 0.4);
                 // recognized by Vuforia and based on location of duck
@@ -221,10 +222,14 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 //move lift down
                 mecanumDrive.moveLiftUp(500,0.4);
                 //turn left 90 degrees
-                mecanumDrive.rotateRightSide(3,true,5,0.4,telemetry);
+                mecanumDrive.rotateLeftSide(3,true,5,0.4,telemetry);
                 //Go foward and park in the warehouse
-                mecanumDrive.moveForward(5,true,5,1,telemetry);
-                //
+                mecanumDrive.moveBackward(2,true,5,0.4,telemetry);
+                mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
+                mecanumDrive.runCarousel(0.4);
+                sleep(3000);
+                mecanumDrive.strafeLeft(4,true, 5,0.4,telemetry);
+
                 break;
 
                 //}
