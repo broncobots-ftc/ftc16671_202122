@@ -82,6 +82,10 @@ public class MecanumDriveOpMode extends OpMode {
             mecanumDrive.runIntake(gamepad1.right_trigger);//take it in
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
+
+        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0){
+            mecanumDrive.runIntake(0);//turn off
+        }
         // Ww will move carousel colckwise and anitclockwise using gamepad 2 triggers
         if (gamepad1.left_bumper){
             //mecanumDrive.intake.setTargetPosition(4000000);
@@ -109,14 +113,13 @@ public class MecanumDriveOpMode extends OpMode {
         //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-            mecanumDrive.box.setPosition(1);
+            mecanumDrive.box.setPosition(.99);
             //wait for some milliseconds
             justWait(1500);
             mecanumDrive.lift.setTargetPosition(20);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-
         }
         //this should go to 500 when position is already up (more than 400, possibly 800,1200 or 1600)
         if(gamepad2.a) {
@@ -144,7 +147,7 @@ public class MecanumDriveOpMode extends OpMode {
                 telemetry.addData("B Position", "position=" + mecanumDrive.lift.getCurrentPosition());
             }
         }
-
+        //this should go to 1600 position x
         if(gamepad2.x) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
             telemetry.addData("X Position", "position=" + mecanumDrive.lift.getCurrentPosition());
@@ -157,6 +160,7 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("X Position", "position=" + mecanumDrive.lift.getCurrentPosition());
             }
         }
+        //this should go to 1800 position y
         if(gamepad2.y) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
                 telemetry.addData("Y Position", "position=" + mecanumDrive.lift.getCurrentPosition());
@@ -170,7 +174,7 @@ public class MecanumDriveOpMode extends OpMode {
             }
         }
 
-        //Dump function - press and hold GP2 RH bumper to dump, release and it goes back
+        //Dump function - press doad-down to dump and return
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
             if (gamepad2.dpad_down) {
                 mecanumDrive.box.setPosition(0);
@@ -178,25 +182,23 @@ public class MecanumDriveOpMode extends OpMode {
                 justWait(1500);
                 mecanumDrive.box.setPosition(0.66);
             }
+            //Dump function - press doad down to dump (and not return - for capstone aiming)
             if (gamepad2.dpad_up) {
                 mecanumDrive.box.setPosition(0);
-                //wait here for some milliseconds
             }
             //telemetry.addData("left-after lift", "position=" + mecanumDrive.intake.getCurrentPosition());
             telemetry.addData("box Position", "position=" + mecanumDrive.lift.getCurrentPosition());
         }
-
+        //Hold the Capstone function - press doad right to HOLD the capstone
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
             if (gamepad2.dpad_right) {
-                mecanumDrive.holder.setPosition(0);
-
+                mecanumDrive.holder.setPosition(.8);
             }
         }
-
+        //Hold the Capstone function - press doad left to RELEASE the capstone
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
             if (gamepad2.dpad_left) {
-                mecanumDrive.holder.setPosition(0.3);
-
+                mecanumDrive.holder.setPosition(.4);
             }
         }
 
@@ -212,9 +214,6 @@ public class MecanumDriveOpMode extends OpMode {
         telemetry.addData("distance fwd", distances[0]);
         telemetry.addData("distance right", distances[1]);
         telemetry.update();
-
-
-
     }
 
     /**
@@ -231,6 +230,4 @@ public class MecanumDriveOpMode extends OpMode {
         }
 
     }
-
-
 }
