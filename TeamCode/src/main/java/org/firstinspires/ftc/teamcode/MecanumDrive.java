@@ -334,7 +334,7 @@ public class MecanumDrive {
 
     }
 
-    public void rotateLeft(double distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
+    public void rotateRightSide(double distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
 
         //get current position for all motors so we can start from there
         flPos = frontLeft.getCurrentPosition();
@@ -371,7 +371,7 @@ public class MecanumDrive {
 
     }
 
-    public void rotateRight(double distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
+    public void rotateLeftSide(double distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
 
         //get current position for all motors so we can start from there
         flPos = frontLeft.getCurrentPosition();
@@ -486,7 +486,7 @@ public class MecanumDrive {
         //First step drive 3 inches foward
         moveForward(26, true, 5, medium, telemetry);
         //straif left 21 inches
-        rotateLeft(1,true,5,fast,telemetry);//0.8-0.9-1
+        rotateRightSide(1,true,5,fast,telemetry);//0.8-0.9-1
         shootPowerShots(0.516);//.526-497-499-.498-496-512-517-516
         sleep(1500);
         if (totalRings == 4){
@@ -546,7 +546,7 @@ public class MecanumDrive {
             //Strafe left to B
            // moveForwardAndRightBasedOnRings(totalRings, 40, 7, telemetry);
             //strafeRightMoveForwardBasedOnRings(totalRings, 24, 25, telemetry);
-            rotateRight(1.1,true,5,fast,telemetry);//0.9-1.1
+            rotateLeftSide(1.1,true,5,fast,telemetry);//0.9-1.1
             moveForward(24, true,10, medium, telemetry);
             //
            // rotateRight(4.2, true, 5, slow, telemetry);
@@ -570,7 +570,7 @@ public class MecanumDrive {
             runIntake(0);
             runConveyor(0);
             moveLifter(0.520);
-            rotateLeft(0.8,true, 5, fast, telemetry);
+            rotateRightSide(0.8,true, 5, fast, telemetry);
             sleep(2000);
             pushRingForwardBack();
             sleep(500);
@@ -591,7 +591,7 @@ public class MecanumDrive {
 
             strafeRightMoveForwardBasedOnRings(totalRings, 38, 36, telemetry);
             //rotate
-            rotateRight(10,true,5,fast,telemetry);
+            rotateLeftSide(10,true,5,fast,telemetry);
 
 
         }
@@ -743,7 +743,7 @@ public class MecanumDrive {
            //move backward
            moveBackward(47, true, 5,fast, telemetry);
            //rotate - added since right is not exactly going right
-           rotateRight(1,true,5,fast,telemetry);
+           rotateLeftSide(1,true,5,fast,telemetry);
            //strafe right
            strafeRight(20, true, 5, fast, telemetry);
            //moving backward to starighten robot
@@ -751,7 +751,7 @@ public class MecanumDrive {
            //sleeping
            sleep(500);
            //rotate
-           rotateRight(1.5,true,5,fast,telemetry);
+           rotateLeftSide(1.5,true,5,fast,telemetry);
            //move forward
            moveForward(47, true, 10, slow, telemetry);//48-46-47
 
@@ -775,18 +775,18 @@ public class MecanumDrive {
            moveBackward(62, true, 5,fast, telemetry);//59
            //moveBackward(4,true, 5,slow,telemetry);
            //rotate - added since right is not exactly going right
-           rotateRight(1,true,5,fast,telemetry);
+           rotateLeftSide(1,true,5,fast,telemetry);
            //strafe right
            strafeRight(27, true, 5, medium, telemetry);//24-26-27
            //moving backward to starighten robot
            //moveBackward(2, true, 5, fast, telemetry);
-           rotateRight(1,true,5,fast,telemetry);
+           rotateLeftSide(1,true,5,fast,telemetry);
            //strafe right
            //strafeRight(12, true, 5, medium, telemetry);//24-26-27
            //moving backward to starighten robot
            moveBackward(2, true, 5, fast, telemetry);
            //rotate
-           rotateLeft(2,true,5,fast,telemetry);//2.2-1.9-1.6-1.7-2
+           rotateRightSide(2,true,5,fast,telemetry);//2.2-1.9-1.6-1.7-2
            //move forward
            //moveForward(10, true, 10, medium, telemetry);//64
            //
@@ -801,13 +801,13 @@ public class MecanumDrive {
             runIntake(0);
             strafeLeft(1,true,5,slow, telemetry);
             strafeLeft(11,true,5,fast,telemetry);
-            rotateLeft(35,true,5,fast,telemetry);
+            rotateRightSide(35,true,5,fast,telemetry);
             putWobbelArmDown();
             releaseWobble();
             moveForward(13,true,5,fast,telemetry);
             grabWobble();
             moveWobbleArmUp();
-            rotateRight(30,true,5,fast,telemetry);
+            rotateLeftSide(30,true,5,fast,telemetry);
             moveForward(12,true,5,fast,telemetry);
             moveWobbleArmDown();
             releaseWobble();
@@ -817,11 +817,11 @@ public class MecanumDrive {
         }else if (totalrings == 1){
               /* wobble arm up, turn 180, put wobble arm down, go forward, grip wobble, wobble arm up,
             turn 18, go forward, wobble arm down, release wobble, strafe left, go back. */
-            rotateLeft(2,true,5,fast,telemetry);
+            rotateRightSide(2,true,5,fast,telemetry);
             moveForward(60, true, 10, fast, telemetry);
             moveWobbleArmDown();
             grabWobble();
-            rotateRight(2, true, 5, fast, telemetry);
+            rotateLeftSide(2, true, 5, fast, telemetry);
             moveForward(60, true, 10, fast, telemetry);
             releaseWobble();
             putWobbelArmUp();
@@ -870,6 +870,9 @@ public class MecanumDrive {
        lift.setTargetPosition(targetPosition);
        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
        lift.setPower(power);
+   }
+   public void moveLiftDown(int targetPosition, double power){
+
    }
 
 

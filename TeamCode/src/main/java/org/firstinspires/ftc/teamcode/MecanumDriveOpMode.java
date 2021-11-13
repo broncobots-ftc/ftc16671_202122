@@ -82,9 +82,11 @@ public class MecanumDriveOpMode extends OpMode {
             mecanumDrive.runIntake(gamepad1.right_trigger);//take it in
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
+        //turn intake power off when gamepad1 b is pressed or right and left trigger both are pressed together
+        if (gamepad1.left_trigger <= 0 && gamepad1.right_trigger <= 0){
 
-        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0){
-            mecanumDrive.runIntake(0);//turn off
+                mecanumDrive.runIntake(0);//turn off
+
         }
         // Ww will move carousel colckwise and anitclockwise using gamepad 2 triggers
         if (gamepad1.left_bumper){
@@ -98,7 +100,7 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
 
-        if(gamepad1.right_bumper && gamepad1.left_bumper){
+        if(!gamepad1.right_bumper && !gamepad1.left_bumper){
             mecanumDrive.carousel.setPower(0);
         }
         //left bumper is 0 to 1, right bumper is 1 to 0
@@ -117,7 +119,7 @@ public class MecanumDriveOpMode extends OpMode {
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
-            mecanumDrive.box.setPosition(.95);
+            mecanumDrive.box.setPosition(.97);
             //wait for some milliseconds
             justWait(1000);
             mecanumDrive.lift.setTargetPosition(35);
@@ -185,6 +187,9 @@ public class MecanumDriveOpMode extends OpMode {
                 //wait here for some milliseconds
                 justWait(1500);
                 mecanumDrive.box.setPosition(0.66);
+                mecanumDrive.lift.setTargetPosition(500);
+                mecanumDrive.holder.setPosition(.73);
+
             }
             //Dump function - press doad down to dump (and not return - for capstone aiming)
             if (gamepad2.dpad_up) {
