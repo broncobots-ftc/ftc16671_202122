@@ -268,9 +268,9 @@ public class MecanumDrive {
         brPos = backRight.getCurrentPosition();
 
         // calculate new targets
-        flPos += distanceInInches * COUNTS_PER_INCH;
+        flPos -= distanceInInches * COUNTS_PER_INCH;
         frPos -= distanceInInches * COUNTS_PER_INCH;
-        blPos -= distanceInInches * COUNTS_PER_INCH;
+        blPos += distanceInInches * COUNTS_PER_INCH;
         brPos += distanceInInches * COUNTS_PER_INCH;
 
         //now since we have right positions for all motors, set target positions for all motors
@@ -306,9 +306,9 @@ public class MecanumDrive {
 
         // calculate new targets
         flPos -= distanceInInches * COUNTS_PER_INCH;
-        frPos += distanceInInches * COUNTS_PER_INCH;
+        frPos -= distanceInInches * COUNTS_PER_INCH;
         blPos += distanceInInches * COUNTS_PER_INCH;
-        brPos -= distanceInInches * COUNTS_PER_INCH;
+        brPos += distanceInInches * COUNTS_PER_INCH;
 
         //now since we have right positions for all motors, set target positions for all motors
         frontLeft.setTargetPosition(flPos);

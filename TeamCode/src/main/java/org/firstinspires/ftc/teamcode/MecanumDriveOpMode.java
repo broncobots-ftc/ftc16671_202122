@@ -104,19 +104,23 @@ public class MecanumDriveOpMode extends OpMode {
         //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.left_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.holder.setPosition(.73);
             mecanumDrive.lift.setTargetPosition(500);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
             mecanumDrive.box.setPosition(0.9);
+            justWait(500);
+            mecanumDrive.box.setPosition(0.66);
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-            mecanumDrive.box.setPosition(.99);
+            mecanumDrive.holder.setPosition(.73);
+            mecanumDrive.box.setPosition(.95);
             //wait for some milliseconds
-            justWait(1500);
-            mecanumDrive.lift.setTargetPosition(20);
+            justWait(1000);
+            mecanumDrive.lift.setTargetPosition(35);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
@@ -164,7 +168,7 @@ public class MecanumDriveOpMode extends OpMode {
         if(gamepad2.y) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
                 telemetry.addData("Y Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-                mecanumDrive.lift.setTargetPosition(1800);
+                mecanumDrive.lift.setTargetPosition(2200);
                 mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 mecanumDrive.lift.setPower(1);
 
@@ -198,7 +202,7 @@ public class MecanumDriveOpMode extends OpMode {
         //Hold the Capstone function - press doad left to RELEASE the capstone
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
             if (gamepad2.dpad_left) {
-                mecanumDrive.holder.setPosition(.4);
+                mecanumDrive.holder.setPosition(.73);
             }
         }
 

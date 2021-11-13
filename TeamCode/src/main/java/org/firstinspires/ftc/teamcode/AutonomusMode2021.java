@@ -59,8 +59,8 @@ public class AutonomusMode2021 extends LinearOpMode {
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
     /** This is for encoder **/
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     COUNTS_PER_MOTOR_REV    = 500 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -113,7 +113,8 @@ public class AutonomusMode2021 extends LinearOpMode {
         //This is for mobile phone
         //parameters.cameraDirection = CameraDirection.BACK;
         //This is for external camera - MAKE SURE DEVICE NAME IS CORRECT
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam 1");
+
+        //parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam 1");
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
@@ -134,11 +135,12 @@ public class AutonomusMode2021 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        initVuforia();
-        initTfod();
+        //initVuforia();
+        //initTfod();
         mecanumDrive.init(hardwareMap);
-        //mecanumDrive.initServo(hardwareMap);
-        //mecanumDrive.initShooterMotors(hardwareMap);
+        mecanumDrive.initCarousel_and_lift(hardwareMap);
+        mecanumDrive.initServo(hardwareMap);
+        mecanumDrive.initIntake(hardwareMap);
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
@@ -158,10 +160,11 @@ public class AutonomusMode2021 extends LinearOpMode {
         if (opModeIsActive()) {
 
             while (opModeIsActive()) {
-                if (tfod != null) {
+                //if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     float seconds = (end - start) / 1000F;
+                    /*
                     while(seconds <= SECONDS_TO_DETECT_OBJECT) {
                         telemetry.addData("# seconds passed : ", seconds);
                         telemetry.update();
@@ -187,40 +190,44 @@ public class AutonomusMode2021 extends LinearOpMode {
                         } else {
                             tfod.shutdown();
                         }
-                    }
+                    }*/
                     // For RED1, with front against wall
                      // Identify location of shipping element/ducky
 
                     //Move backward
-                    mecanumDrive.moveBackward(12, true,5, 1, telemetry);
+                    mecanumDrive.moveBackward(6, true,5, 0.4, telemetry);
                     //Strafe Right
-                    mecanumDrive.strafeRight(5,true,5, 1, telemetry);
+                    mecanumDrive.strafeRight(9,true,5, 0.4, telemetry);
                     //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.moveBackward(5, true, 5, 1, telemetry);
+                    mecanumDrive.moveBackward(2, true, 5, 0.2, telemetry);
                      //Move lifter as
-                    mecanumDrive.moveLiftUp(500);
+                    mecanumDrive.moveLiftUp(1600, 0.4);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
+                    sleep(3000);
+                    //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                      // Move forwaard slightly
-                    mecanumDrive.moveForward(2,true,5,1,telemetry);
+                    mecanumDrive.moveForward(2,true,5,0.4,telemetry);
                      // Strafe right
-                    mecanumDrive.strafeRight(18,true, 5, 1,telemetry);
+                    mecanumDrive.strafeRight(16,true, 5, 0.4,telemetry);
                     //Turn 90 degrees
-                    mecanumDrive.rotateLeft(5, true,5,1,telemetry);
+                    mecanumDrive.rotateRight(8, true,5,0.4,telemetry);
                     //Make contact with carousel
                      // Turn carousel with carousel spinner for a few secs
-                    mecanumDrive.runCarousel(0.8)
+                    mecanumDrive.runCarousel(0.8);
+                    //sleep
+                    sleep(5000);
                      // Strafe Right
-                    mecanumDrive.strafeRight(4,true,5,1,telemetry);
+                    mecanumDrive.strafeRight(3,true,5,0.4,telemetry);
                      // MOve Forward
-                    mecanumDrive.moveForward(20,true,5,1 telemetry);
+                    mecanumDrive.moveForward(20,true,5,0.4, telemetry);
                      // Strafe to wall
-                    mecanumDrive.strafeRight(4,true, 5, 1, telemetry);
+                    mecanumDrive.strafeRight(4,true, 5, 0.4, telemetry);
                      // Move forward to warehouse
 
 
-                }
+                //}
             }
         }
         if (tfod != null) {
