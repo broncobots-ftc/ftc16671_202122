@@ -198,17 +198,25 @@ public class AutonomusMode2021 extends LinearOpMode {
                     //Move backward (make sure to contact the shipping hub)
                     mecanumDrive.moveBackward(5, true, 5, 1, telemetry);
                      //Move lifter as
-
+                    mecanumDrive.moveLiftUp(500);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
+                    mecanumDrive.dumpAndBringbackBox();
                      // Move forwaard slightly
+                    mecanumDrive.moveForward(2,true,5,1,telemetry);
                      // Strafe right
+                    mecanumDrive.strafeRight(18,true, 5, 1,telemetry);
                     //Turn 90 degrees
+                    mecanumDrive.rotateLeft(5, true,5,1,telemetry);
                     //Make contact with carousel
                      // Turn carousel with carousel spinner for a few secs
+                    mecanumDrive.runCarousel(0.8)
                      // Strafe Right
+                    mecanumDrive.strafeRight(4,true,5,1,telemetry);
                      // MOve Forward
+                    mecanumDrive.moveForward(20,true,5,1 telemetry);
                      // Strafe to wall
+                    mecanumDrive.strafeRight(4,true, 5, 1, telemetry);
                      // Move forward to warehouse
 
 
