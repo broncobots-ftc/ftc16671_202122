@@ -48,9 +48,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "RL Autonomus Mode", group = "ftc16671")
+@Autonomous(name = "BR Autonomus Mode", group = "ftc16671")
 
-public class AutonomusMode2021_RL extends LinearOpMode {
+public class AutonomusMode2021_BR extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
@@ -208,7 +208,7 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 //commit does not work
                 mecanumDrive.moveBackward(5, true,5, 0.4, telemetry);//7
                 //Strafe Right
-                mecanumDrive.strafeLeft(-10,true,5, 0.4, telemetry);
+                mecanumDrive.strafeRight(10,true,5, 0.4, telemetry);
                 //Move backward (make sure to contact the shipping hub)
                 mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);//1
                 //Move lifter as
@@ -223,15 +223,14 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 //move lift down
                 mecanumDrive.moveLiftUp(500,0.4);
                 //turn left 90 degrees
-                mecanumDrive.rotateLeftSide(7.15,true,5,0.4,telemetry);//3
+                mecanumDrive.rotateRightSide(7.15,true,5,0.4,telemetry);//3
                 //Go foward and park in the warehouse
-                mecanumDrive.moveBackward(15,true,5,0.4,telemetry);//12, 18, 7.2, 15
+                mecanumDrive.moveBackward(16,true,5,0.4,telemetry);//12, 18, 7.2
                 mecanumDrive.moveBackward(2, true, 5, 0.2,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
-                sleep(1000);
-                mecanumDrive.runCarousel(-0.4);
+                mecanumDrive.runCarousel(0.4);
                 sleep(5000);
-                mecanumDrive.strafeLeft(-9,true, 5,0.4,telemetry);
+                mecanumDrive.strafeRight(8,true, 5,0.4,telemetry);
                 mecanumDrive.moveBackward(2, true, 5, 0.4, telemetry);
 
                 break;
