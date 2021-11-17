@@ -116,7 +116,7 @@ public class AutonomusMode extends LinearOpMode {
         //This is for mobile phone
         //parameters.cameraDirection = CameraDirection.BACK;
         //This is for external camera - MAKE SURE DEVICE NAME IS CORRECT
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam 1");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 

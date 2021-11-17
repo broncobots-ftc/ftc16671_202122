@@ -29,9 +29,12 @@ public class MecanumDriveOpMode extends OpMode {
         //setup gamepads
         //getting gamepad1 controls
 
-        double forward = gamepad1.left_stick_y * -1; //The y direction on the gamepad is reversed idk why
-        double strafe = gamepad1.left_stick_x * 1;
-        double rotate = gamepad1.right_stick_x * 1;
+        //double forward = gamepad1.left_stick_y * -1; //The y direction on the gamepad is reversed idk why
+        double forward = Math.abs(gamepad1.left_stick_y)*gamepad1.left_stick_y*-1;
+        //double strafe = gamepad1.left_stick_x * 1;
+        double strafe = Math.abs(gamepad1.left_stick_x)*gamepad1.left_stick_x * 1;
+        //double rotate = gamepad1.right_stick_x * 1;
+        double rotate = Math.abs(gamepad1.right_stick_x)*gamepad1.right_stick_x * 1;
         /*
         double gamepadrt = gamepad1.right_trigger;
         double gamepadlt = gamepad1.left_trigger;
