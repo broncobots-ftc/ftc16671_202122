@@ -192,7 +192,7 @@ public class AutonomusMode2021 extends LinearOpMode {
                      // Identify location of shipping element/ducky
 
                     //Move backward
-                    mecanumDrive.moveBackward(12, true,5, 1, telemetry);
+                    mecanumDrive.moveBackward(12, true,5, 0.5, telemetry);
                     //Strafe Right
                     mecanumDrive.strafeRight(5,true,5, 1, telemetry);
                     //Move backward (make sure to contact the shipping hub)
