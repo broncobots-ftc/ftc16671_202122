@@ -29,9 +29,12 @@ public class MecanumDriveOpMode extends OpMode {
         //setup gamepads
         //getting gamepad1 controls
 
-        double forward = gamepad1.left_stick_y * -1; //The y direction on the gamepad is reversed idk why
-        double strafe = gamepad1.left_stick_x * 1;
-        double rotate = gamepad1.right_stick_x * 1;
+        //double forward = gamepad1.left_stick_y * -1; //The y direction on the gamepad is reversed idk why
+        double forward = Math.abs(gamepad1.left_stick_y)*gamepad1.left_stick_y*-1;
+        //double strafe = gamepad1.left_stick_x * 1;
+        double strafe = Math.abs(gamepad1.left_stick_x)*gamepad1.left_stick_x * 1;
+        //double rotate = gamepad1.right_stick_x * 1;
+        double rotate = Math.abs(gamepad1.right_stick_x)*gamepad1.right_stick_x * 1;
         /*
         double gamepadrt = gamepad1.right_trigger;
         double gamepadlt = gamepad1.left_trigger;
@@ -82,9 +85,11 @@ public class MecanumDriveOpMode extends OpMode {
             mecanumDrive.runIntake(gamepad1.right_trigger);//take it in
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
+        //turn intake power off when gamepad1 b is pressed or right and left trigger both are pressed together
+        if (gamepad1.left_trigger <= 0 && gamepad1.right_trigger <= 0){
 
-        if (gamepad1.left_trigger > 0 && gamepad1.right_trigger > 0){
-            mecanumDrive.runIntake(0);//turn off
+                mecanumDrive.runIntake(0);//turn off
+
         }
         // Ww will move carousel colckwise and anitclockwise using gamepad 2 triggers
         if (gamepad1.left_bumper){
@@ -98,25 +103,29 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
 
-        if(gamepad1.right_bumper && gamepad1.left_bumper){
+        if(!gamepad1.right_bumper && !gamepad1.left_bumper){
             mecanumDrive.carousel.setPower(0);
         }
         //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.left_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
+            mecanumDrive.holder.setPosition(.73);
             mecanumDrive.lift.setTargetPosition(500);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
             mecanumDrive.box.setPosition(0.9);
+            justWait(500);
+            mecanumDrive.box.setPosition(0.66);
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //left bumper is 0 to 1, right bumper is 1 to 0
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
-            mecanumDrive.box.setPosition(.99);
+            mecanumDrive.holder.setPosition(.73);
+            mecanumDrive.box.setPosition(.97);
             //wait for some milliseconds
-            justWait(1500);
-            mecanumDrive.lift.setTargetPosition(20);
+            justWait(1000);
+            mecanumDrive.lift.setTargetPosition(35);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
@@ -164,7 +173,7 @@ public class MecanumDriveOpMode extends OpMode {
         if(gamepad2.y) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
                 telemetry.addData("Y Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-                mecanumDrive.lift.setTargetPosition(1800);
+                mecanumDrive.lift.setTargetPosition(2200);
                 mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 mecanumDrive.lift.setPower(1);
 
@@ -181,6 +190,9 @@ public class MecanumDriveOpMode extends OpMode {
                 //wait here for some milliseconds
                 justWait(1500);
                 mecanumDrive.box.setPosition(0.66);
+                mecanumDrive.lift.setTargetPosition(500);
+                mecanumDrive.holder.setPosition(.73);
+
             }
             //Dump function - press doad down to dump (and not return - for capstone aiming)
             if (gamepad2.dpad_up) {
@@ -198,7 +210,7 @@ public class MecanumDriveOpMode extends OpMode {
         //Hold the Capstone function - press doad left to RELEASE the capstone
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
             if (gamepad2.dpad_left) {
-                mecanumDrive.holder.setPosition(.4);
+                mecanumDrive.holder.setPosition(.73);
             }
         }
 

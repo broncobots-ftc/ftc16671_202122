@@ -34,12 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.util.List;
 
 
 /**
@@ -52,15 +48,15 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "New Autonomus Mode", group = "ftc16671")
+@Autonomous(name = "RL Autonomus Mode", group = "ftc16671")
 
-public class AutonomusMode2021 extends LinearOpMode {
+public class AutonomusMode2021_RL extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
     /** This is for encoder **/
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     COUNTS_PER_MOTOR_REV    = 500 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -113,7 +109,8 @@ public class AutonomusMode2021 extends LinearOpMode {
         //This is for mobile phone
         //parameters.cameraDirection = CameraDirection.BACK;
         //This is for external camera - MAKE SURE DEVICE NAME IS CORRECT
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam 1");
+
+        //parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam 1");
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
@@ -134,11 +131,12 @@ public class AutonomusMode2021 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        initVuforia();
-        initTfod();
+        //initVuforia();
+        //initTfod();
         mecanumDrive.init(hardwareMap);
-        //mecanumDrive.initServo(hardwareMap);
-        //mecanumDrive.initShooterMotors(hardwareMap);
+        mecanumDrive.initCarousel_and_lift(hardwareMap);
+        mecanumDrive.initServo(hardwareMap);
+        mecanumDrive.initIntake(hardwareMap);
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
@@ -158,10 +156,11 @@ public class AutonomusMode2021 extends LinearOpMode {
         if (opModeIsActive()) {
 
             while (opModeIsActive()) {
-                if (tfod != null) {
+                //if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     float seconds = (end - start) / 1000F;
+                    /*
                     while(seconds <= SECONDS_TO_DETECT_OBJECT) {
                         telemetry.addData("# seconds passed : ", seconds);
                         telemetry.update();
@@ -187,40 +186,57 @@ public class AutonomusMode2021 extends LinearOpMode {
                         } else {
                             tfod.shutdown();
                         }
-                    }
+                    }*/
                     // For RED1, with front against wall
                      // Identify location of shipping element/ducky
+                // For RED1, with front against wall
+                // Identify location of shipping element/ducky
+                mecanumDrive.box.setPosition(.90);
+                //lift up
+                mecanumDrive.moveLiftUp(500, 0.4);
+                //Move backward
+                //mecanumDrive.moveBackward(3,true,5,0.4, telemetry);
+                //mecanumDrive.rotateLeftSide(3, true,5,0.4,telemetry);
+                //mecanumDrive.strafeRight(5, true,5, 0.4, telemetry);
+                //mecanumDrive.moveBackward(1,true,5,0.4,telemetry);
+                //mecanumDrive.runCarousel(0.4);
+                //sleep(5000);
+                //mecanumDrive.runCarousel(0);
+               // mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
+                sleep(500);
+                mecanumDrive.box.setPosition(.66);
+                //commit does not work
+                mecanumDrive.moveBackward(5, true,5, 0.4, telemetry);//7
+                //Strafe Right
+                mecanumDrive.strafeLeft(-10,true,5, 0.4, telemetry);
+                //Move backward (make sure to contact the shipping hub)
+                mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);//1
+                //Move lifter as
+                mecanumDrive.moveLiftUp(1600, 0.4);
+                // recognized by Vuforia and based on location of duck
+                //Use dropping function
+                sleep(2000);
+                //wait for two seconds
+                mecanumDrive.dumpAndBringbackBox();
+                // Move forwaard slightly
+                mecanumDrive.moveForward(6,true,5,0.4,telemetry);//5
+                //move lift down
+                mecanumDrive.moveLiftUp(500,0.4);
+                //turn left 90 degrees
+                mecanumDrive.rotateLeftSide(7.15,true,5,0.4,telemetry);//3
+                //Go foward and park in the warehouse
+                mecanumDrive.moveBackward(15,true,5,0.4,telemetry);//12, 18, 7.2, 15
+                mecanumDrive.moveBackward(2, true, 5, 0.2,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
+               // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
+                sleep(1000);
+                mecanumDrive.runCarousel(-0.4);
+                sleep(5000);
+                mecanumDrive.strafeLeft(-9,true, 5,0.4,telemetry);
+                mecanumDrive.moveBackward(2, true, 5, 0.4, telemetry);
 
-                    //Move backward
-                    mecanumDrive.moveBackward(12, true,5, 0.5, telemetry);
-                    //Strafe Right
-                    mecanumDrive.strafeRight(5,true,5, 1, telemetry);
-                    //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.moveBackward(5, true, 5, 1, telemetry);
-                     //Move lifter as
-                    mecanumDrive.moveLiftUp(500);
-                    // recognized by Vuforia and based on location of duck
-                    //Use dropping function
-                    mecanumDrive.dumpAndBringbackBox();
-                     // Move forwaard slightly
-                    mecanumDrive.moveForward(2,true,5,1,telemetry);
-                     // Strafe right
-                    mecanumDrive.strafeRight(18,true, 5, 1,telemetry);
-                    //Turn 90 degrees
-                    mecanumDrive.rotateLeft(5, true,5,1,telemetry);
-                    //Make contact with carousel
-                     // Turn carousel with carousel spinner for a few secs
-                    mecanumDrive.runCarousel(0.8)
-                     // Strafe Right
-                    mecanumDrive.strafeRight(4,true,5,1,telemetry);
-                     // MOve Forward
-                    mecanumDrive.moveForward(20,true,5,1 telemetry);
-                     // Strafe to wall
-                    mecanumDrive.strafeRight(4,true, 5, 1, telemetry);
-                     // Move forward to warehouse
+                break;
 
-
-                }
+                //}
             }
         }
         if (tfod != null) {
