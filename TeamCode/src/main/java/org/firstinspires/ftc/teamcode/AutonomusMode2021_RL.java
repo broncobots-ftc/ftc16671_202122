@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -49,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
  * is explained below.
  */
 @Autonomous(name = "RL Autonomus Mode", group = "ftc16671")
-
+@Disabled
 public class AutonomusMode2021_RL extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";

@@ -93,8 +93,11 @@ public class MecanumDriveOpMode extends OpMode {
         }
         // We are making the robot move slower when the bumpers are moved in gamepad1
         if (gamepad1.left_bumper || gamepad1.right_bumper){
-            //mecanumDrive.intake.setTargetPosition(4000000);
-            mecanumDrive.setSpeeds(0.25, 0.25, 0.25, 0.25);
+            forward = Math.abs(gamepad1.left_stick_y)*gamepad1.left_stick_y*-.2;
+            //double strafe = gamepad1.left_stick_x * 1;
+            strafe = Math.abs(gamepad1.left_stick_x)*gamepad1.left_stick_x * .2;
+            //double rotate = gamepad1.right_stick_x * 1;
+            rotate = Math.abs(gamepad1.right_stick_x)*gamepad1.right_stick_x * .2;
 
         }
 
