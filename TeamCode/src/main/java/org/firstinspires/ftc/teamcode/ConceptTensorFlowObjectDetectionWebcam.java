@@ -120,7 +120,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.2, 1.78);
+            tfod.setZoom(1.0, 1.78);
             //magnification:2, 16.0/9.0);
         }
 

@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -215,7 +216,7 @@ public class AutonomusMode2021_BR extends LinearOpMode {
                 mecanumDrive.moveLiftUp(1600, 0.4);
                 // recognized by Vuforia and based on location of duck
                 //Use dropping function
-                sleep(2000);
+                sleep(750);//2000
                 //wait for two seconds
                 mecanumDrive.dumpAndBringbackBox();
                 //just to commit
@@ -228,13 +229,16 @@ public class AutonomusMode2021_BR extends LinearOpMode {
                 mecanumDrive.rotateRightSide(7.15,true,5,0.4,telemetry);//3
                 //Go foward and park in the warehouse
                 mecanumDrive.moveBackward(16,true,5,0.4,telemetry);//12, 18, 7.2
-                mecanumDrive.moveBackward(2, true, 5, 0.2,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
+                mecanumDrive.moveBackward(2.5, true, 5, 0.2,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
                 mecanumDrive.runCarousel(0.4);
                 sleep(5000);
                 mecanumDrive.strafeRight(8,true, 5,0.4,telemetry);
                 mecanumDrive.moveBackward(2, true, 5, 0.4, telemetry);
-
+                //puting box back to floor to prepare for tele op
+                mecanumDrive.box.setPosition(1);
+                sleep(750);
+                mecanumDrive.moveLiftUp(0,0.4);
                 break;
 
                 //}
