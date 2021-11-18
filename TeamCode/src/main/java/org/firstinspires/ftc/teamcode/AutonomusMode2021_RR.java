@@ -38,8 +38,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.util.List;
 
 
 /**
@@ -55,9 +59,18 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 @Autonomous(name = "RR Autonomus Mode", group = "ftc16671")
 
 public class AutonomusMode2021_RR extends LinearOpMode {
-    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
-    private static final String LABEL_FIRST_ELEMENT = "Quad";
-    private static final String LABEL_SECOND_ELEMENT = "Single";
+    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    //private static final String LABEL_FIRST_ELEMENT = "Quad";
+    //private static final String LABEL_SECOND_ELEMENT = "Single";
+    private static final String[] LABELS = {
+            "Ball",
+            "Cube",
+            "Duck",
+            "Marker"
+    };
+
+    private static final String LABEL_DUCK = "Duck";
+
     /** This is for encoder **/
     static final double     COUNTS_PER_MOTOR_REV    = 500 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP
@@ -73,7 +86,7 @@ public class AutonomusMode2021_RR extends LinearOpMode {
     static final int fourRingsMinHeight = 240;
     static final int fourRingsMaxHeight = 340;
 
-    static final int SECONDS_TO_DETECT_OBJECT = 0;
+    static final int SECONDS_TO_DETECT_OBJECT = 5;
 
     private MecanumDrive mecanumDrive = new MecanumDrive();
     private ElapsedTime runtime = new ElapsedTime();
@@ -100,6 +113,7 @@ public class AutonomusMode2021_RR extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
+
     /**
      * Initialize the Vuforia localization engine.
      */
@@ -110,12 +124,12 @@ public class AutonomusMode2021_RR extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        //This is for mobile phone
-        //parameters.cameraDirection = CameraDirection.BACK;
-        //This is for external camera - MAKE SURE DEVICE NAME IS CORRECT
-
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
 
     /**
@@ -126,8 +140,10 @@ public class AutonomusMode2021_RR extends LinearOpMode {
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.isModelTensorFlow2 = true;
+        tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }
 
 
@@ -135,8 +151,8 @@ public class AutonomusMode2021_RR extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //initVuforia();
-        //initTfod();
+        initVuforia();
+        initTfod();
         mecanumDrive.init(hardwareMap);
         mecanumDrive.initCarousel_and_lift(hardwareMap);
         mecanumDrive.initServo(hardwareMap);
@@ -145,19 +161,53 @@ public class AutonomusMode2021_RR extends LinearOpMode {
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
+
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(1.2, 1.78);
+            tfod.setZoom(1.0, 1.78);
             //tfod.setZoom(1, 16.0/9.0);
         }
-
-        /** Wait for the game to begin */
+        /*
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        if (updatedRecognitions != null) {
+            telemetry.addData("# Object Detected", updatedRecognitions.size());
+        }
+        */
+        // Wait for the game to begin
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
         long start = System.currentTimeMillis();
         long end = System.currentTimeMillis();
-        int totalRings = 0;
+        int level = 0;
+
+        /*
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        // step through the list of recognitions and display boundary info.
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
+                            i++;
+                        }
+                        telemetry.update();
+                    }
+                }
+            }
+        }
+        */
+
+
         if (opModeIsActive()) {
 
             while (opModeIsActive()) {
@@ -166,12 +216,14 @@ public class AutonomusMode2021_RR extends LinearOpMode {
                     // the last time that call was made.
                     float seconds = (end - start) / 1000F;
 
-                    while(seconds <= SECONDS_TO_DETECT_OBJECT) {
-                        telemetry.addData("# seconds passed : ", seconds);
-                        telemetry.update();
+                    while (seconds <= SECONDS_TO_DETECT_OBJECT) {
+                        //telemetry.addData("# seconds passed : ", seconds);
+                        //telemetry.update();
                         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                         end = System.currentTimeMillis();
                         seconds = (end - start) / 1000F;
+                        //telemetry.addData("# Object Detected");
+
                         if (updatedRecognitions != null) {
 
                             telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -181,71 +233,110 @@ public class AutonomusMode2021_RR extends LinearOpMode {
                             int i = 0;
                             for (Recognition recognition : updatedRecognitions) {
                                 telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                                telemetry.addData(String.format("Total rings height (%d)", i), "%.03f", recognition.getHeight());
+                                telemetry.addData(String.format("Left Side Value (%d)", i), "%.03f", recognition.getLeft());
                                 telemetry.update();
                                 float totalHeight = recognition.getHeight();
-
+                                float leftSide = recognition.getLeft();
+                                level = detectDuckLevel(leftSide, recognition.getLabel());
+                                telemetry.addData("Level : ", level);
+                                i++;
                             }
                             telemetry.update();
 
-                        } else {
-                            tfod.shutdown();
                         }
                     }
+
                     // For RED1, with front against wall
-                     // Identify location of shipping element/ducky
+                    // Identify location of shipping element/ducky
                     mecanumDrive.box.setPosition(.90);
                     //lift up
                     mecanumDrive.moveLiftUp(500, 0.4);
                     //Move backward
-                    mecanumDrive.moveBackward(5, true,5, 0.4, telemetry);
+                    mecanumDrive.moveBackward(5, true, 5, 0.4, telemetry);
                     //Strafe Right
-                    mecanumDrive.strafeRight(10,true,5, 0.4, telemetry);
+                    mecanumDrive.strafeRight(10, true, 5, 0.4, telemetry);
                     //Move backward (make sure to contact the shipping hub)
                     mecanumDrive.moveBackward(2, true, 5, 0.2, telemetry);
-                     //Move lifter as
-                    mecanumDrive.moveLiftUp(1600, 0.4);
+                    //Move lifter as
+                    mecanumDrive.moveLiftUp(getLiftHeight(level), 0.8);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
                     sleep(3000);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
-                     // Move forwaard slightly
-                    mecanumDrive.moveForward(2,true,5,0.4,telemetry);
+                    // Move forwaard slightly
+                    mecanumDrive.moveForward(2, true, 5, 0.4, telemetry);
                     //move lift down
-                    mecanumDrive.moveLiftUp(500,0.4);
+                    mecanumDrive.moveLiftUp(500, 0.8);
                     //turn left 90 degrees
-                    mecanumDrive.rotateLeftSide(7,true,5,0.4,telemetry);
+                    mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
                     //Go foward and park in the warehouse
-                    mecanumDrive.moveForward(21,true,5,1,telemetry);
-                    //
+                    mecanumDrive.moveForward(21, true, 5, 1, telemetry);
+                    //puting box back to floor to prepare for tele op
+                    mecanumDrive.box.setPosition(1);
+                    sleep(750);
+                    mecanumDrive.moveLiftUp(0,0.4);
                     break;
 
 
-
-                     // Strafe right
+                    // Strafe right
                     //mecanumDrive.strafeRight(16,true, 5, 0.4,telemetry);
                     //Turn 90 degrees
                     //mecanumDrive.rotateRight(8, true,5,0.4,telemetry);
                     //Make contact with carousel
-                     // Turn carousel with carousel spinner for a few secs
-                   // mecanumDrive.runCarousel(0.8);
+                    // Turn carousel with carousel spinner for a few secs
+                    // mecanumDrive.runCarousel(0.8);
                     //sleep
                     //sleep(5000);
-                     // Strafe Right
+                    // Strafe Right
                     //mecanumDrive.strafeRight(3,true,5,0.4,telemetry);
-                     // MOve Forward
+                    // MOve Forward
                     //mecanumDrive.moveForward(20,true,5,0.4, telemetry);
-                     // Strafe to wall
+                    // Strafe to wall
                     //mecanumDrive.strafeRight(4,true, 5, 0.4, telemetry);
-                     // Move forward to warehouse
+                    // Move forward to warehouse
 
 
-                //}
+                    //}
+                }
+            }
+            if (tfod != null) {
+                tfod.shutdown();
             }
         }
-        if (tfod != null) {
-            tfod.shutdown();
+    }
+
+    /**
+     *
+     * let's detect rings based on height of the object.
+     * @param leftSide
+     * @param duckLabel
+     * @return int - Level
+     */
+    private int detectDuckLevel(float leftSide, String duckLabel){
+        int level = 1;
+        if(LABEL_DUCK.equals(duckLabel)) {
+            if (leftSide > 90 && leftSide < 250) {
+                level = 2;
+            } else if (leftSide > 300) {
+                level = 3;
+            } else {
+                level = 1;
+            }
         }
+        return level;
+    }
+
+    public int getLiftHeight(int level){
+        int height = 500;
+        if (level == 1){
+            height = 600;
+
+        } else if (level == 2){
+            height = 1100; //900
+        } else if (level == 3){
+            height = 1800;
+        }
+        return height;
     }
 }

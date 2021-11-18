@@ -78,6 +78,11 @@ public class MecanumDrive {
         backRight = hwMap.get(DcMotor.class, "back_right_motor");
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         //grabber = hwMap.get(Servo.class, "left_hand");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -206,7 +211,7 @@ public class MecanumDrive {
             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
                     backRight.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
         }
         setSpeeds(0,0,0,0);
 
@@ -253,7 +258,53 @@ public class MecanumDrive {
             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
                     backRight.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
+        }
+        setSpeeds(0,0,0,0);
+
+    }
+
+    /**
+     * Move specific distance (in inches) backwards with specific speed.     *
+     *
+     * @param distanceInInches
+     * @param isOpModeActive
+     * @param timeoutS
+     * @param speed
+     * @param telemetry
+     */
+    public void moveBackward(double distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
+
+        //get current position for all motors so we can start from there
+        flPos = frontLeft.getCurrentPosition();
+        frPos = frontRight.getCurrentPosition();
+        blPos = backLeft.getCurrentPosition();
+        brPos = backRight.getCurrentPosition();
+
+        // calculate new targets
+        flPos -= distanceInInches * COUNTS_PER_INCH;
+        frPos -= distanceInInches * COUNTS_PER_INCH;
+        blPos -= distanceInInches * COUNTS_PER_INCH;
+        brPos -= distanceInInches * COUNTS_PER_INCH;
+
+        //now since we have right positions for all motors, set target positions for all motors
+        frontLeft.setTargetPosition(flPos);
+        frontRight.setTargetPosition(frPos);
+        backLeft.setTargetPosition(blPos);
+        backRight.setTargetPosition(brPos);
+
+        setAllMotorsToRunToPosition();
+        runtime.reset();
+        setSpeeds(speed, speed,speed,speed);
+        while (runtime.seconds() < timeoutS &&
+                (frontLeft.isBusy() && frontRight.isBusy())) {
+            //wait or print something in telemetry
+            telemetry.addLine("Moving backward...");
+            telemetry.addData("Target", "%7d :%7d", flPos, frPos, blPos, brPos);
+            telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
+                    frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
+                    backRight.getCurrentPosition());
+            //telemetry.update();
         }
         setSpeeds(0,0,0,0);
 
@@ -290,7 +341,7 @@ public class MecanumDrive {
             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
                     backRight.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
         }
         setSpeeds(0,0,0,0);
 
@@ -328,7 +379,7 @@ public class MecanumDrive {
             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
                     backRight.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
         }
         setSpeeds(0,0,0,0);
 
@@ -365,7 +416,7 @@ public class MecanumDrive {
             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
                     backRight.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
         }
         setSpeeds(0,0,0,0);
 
@@ -402,7 +453,7 @@ public class MecanumDrive {
             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
                     backRight.getCurrentPosition());
-            telemetry.update();
+            //telemetry.update();
         }
         setSpeeds(0,0,0,0);
 
@@ -854,7 +905,7 @@ public class MecanumDrive {
 
     public void dumpAndBringbackBox(){
      box.setPosition(0);
-     sleep(3000);
+     sleep(2000);
      box.setPosition(1);
     }
 
