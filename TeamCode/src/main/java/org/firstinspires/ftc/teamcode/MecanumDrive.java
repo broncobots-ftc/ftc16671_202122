@@ -6,11 +6,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-public class MecanumDrive {
+ public class MecanumDrive {
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backRight;
@@ -24,6 +28,18 @@ public class MecanumDrive {
 
     Servo holder;//holder for capstone
     Servo box;//box to hold cubes and balls
+
+     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+
+     private static final String[] LABELS = {
+             "Ball",
+             "Cube",
+             "Duck",
+             "Marker"
+    };
+
+    private static final String LABEL_DUCK = "Duck";
+
 
 
     private double fast = 1.0; // Limit motor power to this value for Andymark RUN_USING_ENCODER mode
@@ -59,7 +75,62 @@ public class MecanumDrive {
 
     ElapsedTime runtime = new ElapsedTime();
 
-    public MecanumDrive() {
+     /*
+      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+      * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+      * web site at https://developer.vuforia.com/license-manager.
+      *
+      */
+     private static final String VUFORIA_KEY =
+             "AWrb413/////AAABmQT6xsY2eEeEuRH7ulHkqXaAxt2nbyCB1ZDQfx1F+X80Nz5JjPzStB+GpmAByIBVfrjDCkRdsHsurFZvZruc+Rr8KeaKixYFNtpkbmk9DxNPtR3Tq67CVKTZYC46SR+zghr8zn5nP9NLOHWcVYFcNuTR8rx7R9QzAPlKYX60OHC6OLc5ngylJH/zvESjkSMq/84O68lIfkKVycJ7a8085IQBGfVh/yYEJQg3txuehOK97yTSltcJ8CYiM0qZBVRtGIbS2N6D8IZc8BpyjqTaZ8YZhE2gjCYVtlBKk6pveRidtkb0UA1uVmaVR0B9FeSlzwx8h38nbnIJlJF/WOuXNSApPALRl5wn8FZuY01VnV0s";
+
+     /**
+      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+      * localization engine.
+      */
+     private VuforiaLocalizer vuforia;
+     /**
+      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
+      * Detection engine.
+      */
+     protected TFObjectDetector tfod;
+
+
+     /**
+      * Initialize the Vuforia localization engine.
+      */
+     protected void initVuforia(HardwareMap hardwareMap) {
+         /*
+          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+          */
+         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+         parameters.vuforiaLicenseKey = VUFORIA_KEY;
+         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+         //  Instantiate the Vuforia engine
+         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+     }
+
+     /**
+      * Initialize the TensorFlow Object Detection engine.
+      */
+     protected void initTfod(HardwareMap hardwareMap) {
+         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+         tfodParameters.minResultConfidence = 0.8f;
+         tfodParameters.isModelTensorFlow2 = true;
+         tfodParameters.inputSize = 320;
+         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
+     }
+
+
+     public MecanumDrive() {
 
         float[] data = {1.0f, 1.0f, 1.0f,
                 1.0f, -1.0f, -1.0f,
@@ -927,6 +998,45 @@ public class MecanumDrive {
    }
 
 
+    /**
+     *
+     * let's detect rings based on height of the object.
+     * @param leftSide
+     * @param duckLabel
+     * @return int - Level
+     */
+    public int detectDuckLevel(float leftSide, String duckLabel){
+        int level = 1;
+        if(LABEL_DUCK.equals(duckLabel)) {
+            if (leftSide > 90 && leftSide < 250) {
+                level = 2;
+            } else if (leftSide > 300) {
+                level = 3;
+            } else {
+                level = 1;
+            }
+        }
+        return level;
+    }
+
+    /**
+     *
+     *
+     * @param level
+     * @return
+     */
+    public int getLiftHeight(int level){
+        int height = 500;
+        if (level == 1){
+            height = 600;
+
+        } else if (level == 2){
+            height = 1100; //900
+        } else if (level == 3){
+            height = 1800;
+        }
+        return height;
+    }
 
 
 

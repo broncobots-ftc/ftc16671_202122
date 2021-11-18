@@ -61,7 +61,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
    *  2: Duck,
    *  3: Marker (duck location tape marker)
    *
-   *  Two additional model assets are available which only contain a subset of the objects:
+   *  Two additional model assets are available which only cont\ain a subset of the objects:
    *  FreightFrenzy_BC.tflite  0: Ball,  1: Cube
    *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
    */
