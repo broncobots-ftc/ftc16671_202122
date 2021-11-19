@@ -203,7 +203,7 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 //mecanumDrive.runCarousel(0.4);
                 //sleep(5000);
                 //mecanumDrive.runCarousel(0);
-               // mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
+                // mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
                 sleep(500);
                 mecanumDrive.box.setPosition(.66);
                 //commit does not work
@@ -228,7 +228,7 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 //Go foward and park in the warehouse
                 mecanumDrive.moveBackward(15,true,5,0.4,telemetry);//12, 18, 7.2, 15
                 mecanumDrive.moveBackward(2.6, true, 5, 0.2,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
-               // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
+                // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
                 sleep(1000);
                 mecanumDrive.runCarousel(-0.4);
                 sleep(5000);
@@ -239,7 +239,6 @@ public class AutonomusMode2021_RL extends LinearOpMode {
                 sleep(750);
                 mecanumDrive.moveLiftUp(0,0.4);
                 break;
-
                 //}
             }
         }

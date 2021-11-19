@@ -1,35 +1,31 @@
-
 /* Copyright (c) 2019 FIRST. All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted (subject to the limitations in the disclaimer below) provided that
-* the following conditions are met:
-*
-* Redistributions of source code must retain the above copyright notice, this list
-* of conditions and the following disclaimer.
-*
-* Redistributions in binary form must reproduce the above copyright notice, this
-* list of conditions and the following disclaimer in the documentation and/or
-* other materials provided with the distribution.
-*
-* Neither the name of FIRST nor the names of its contributors may be used to endorse or
-* promote products derived from this software without specific prior written permission.
-*
-* NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-* LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-* THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-
-
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 package org.firstinspires.ftc.teamcode;
 
@@ -37,11 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
@@ -56,10 +48,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "RR Autonomus", group = "ftc16671")
+@Autonomous(name = "BR Autonomus", group = "ftc16671")
 
-public class Autonomus2021_RR extends LinearOpMode {
-
+public class Autonomus2021_BR extends LinearOpMode {
     /** This is for encoder **/
     static final double     COUNTS_PER_MOTOR_REV    = 500 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP
@@ -75,7 +66,7 @@ public class Autonomus2021_RR extends LinearOpMode {
     static final int fourRingsMinHeight = 240;
     static final int fourRingsMaxHeight = 340;
 
-    static final int SECONDS_TO_DETECT_OBJECT = 5;
+    static final int SECONDS_TO_DETECT_OBJECT = 0;
 
     private MecanumDrive mecanumDrive = new MecanumDrive();
     private ElapsedTime runtime = new ElapsedTime();
@@ -94,23 +85,19 @@ public class Autonomus2021_RR extends LinearOpMode {
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
-
         if (mecanumDrive.tfod != null) {
             mecanumDrive.tfod.activate();
             mecanumDrive.tfod.setZoom(1.0, 1.78);
             //tfod.setZoom(1, 16.0/9.0);
         }
-
-        // Wait for the game to begin
+        /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
         long start = System.currentTimeMillis();
         long end = System.currentTimeMillis();
+        int totalRings = 0;
         int level = 0;
-
-
-
         if (opModeIsActive()) {
 
             while (opModeIsActive()) {
@@ -148,41 +135,61 @@ public class Autonomus2021_RR extends LinearOpMode {
 
                         }
                     }
-
+                    // For RED1, with front against wall
+                    // Identify location of shipping element/ducky
                     // For RED1, with front against wall
                     // Identify location of shipping element/ducky
                     mecanumDrive.holder.setPosition(.73);
                     mecanumDrive.box.setPosition(.90);
                     //lift up
                     mecanumDrive.moveLiftUp(500, 0.4);
+                    //Move backward
+                    //mecanumDrive.moveBackward(3,true,5,0.4, telemetry);
+                    //mecanumDrive.rotateLeftSide(3, true,5,0.4,telemetry);
+                    //mecanumDrive.strafeRight(5, true,5, 0.4, telemetry);
+                    //mecanumDrive.moveBackward(1,true,5,0.4,telemetry);
+                    //mecanumDrive.runCarousel(0.4);
+                    //sleep(5000);
+                    //mecanumDrive.runCarousel(0);
+                    // mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
                     sleep(500);
                     mecanumDrive.box.setPosition(.66);
-                    //Move backward
-                    mecanumDrive.moveBackward(5, true, 5, 0.4, telemetry);
+                    //commit does not work
+                    mecanumDrive.moveBackward(5, true,5, 0.4, telemetry);//7
                     //Strafe Right
-                    mecanumDrive.strafeRight(10, true, 5, 0.4, telemetry);
+                    mecanumDrive.strafeRight(10,true,5, 0.4, telemetry);
                     //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.moveBackward(2, true, 5, 0.2, telemetry);
+                    mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);//1
                     //Move lifter as
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
-                    sleep(1500);
+                    sleep(1500);//2000
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
+                    //just to commit
+                    //just to commit
                     // Move forwaard slightly
-                    mecanumDrive.moveForward(2, true, 5, 0.4, telemetry);
+                    mecanumDrive.moveForward(6,true,5,0.4,telemetry);//
                     //move lift down
-                    mecanumDrive.moveLiftUp(500, 0.8);
+                    mecanumDrive.moveLiftUp(500,0.4);
                     //turn left 90 degrees
-                    mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
+                    mecanumDrive.rotateRightSide(14.3,true,5,0.4,telemetry);//3
                     //Go foward and park in the warehouse
-                    mecanumDrive.moveForward(21, true, 5, 1, telemetry);
+                    mecanumDrive.strafeRight(18,true,5,0.4,telemetry);//12, 18, 7.2
+                    mecanumDrive.strafeRight(2, true, 5, 0.1,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
+                    // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
+                    mecanumDrive.runCarousel(-0.4);
+                    sleep(5000);
+                    mecanumDrive.moveForward(8,true, 5,0.4,telemetry);
+                    mecanumDrive.strafeRight(3, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
                     sleep(750);
                     mecanumDrive.moveLiftUp(0,0.4);
                     break;
+
+                    //}
                 }
             }
             if (mecanumDrive.tfod != null) {
@@ -190,6 +197,5 @@ public class Autonomus2021_RR extends LinearOpMode {
             }
         }
     }
-
 
 }

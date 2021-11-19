@@ -147,20 +147,32 @@ public class Autonomus2021_BL extends LinearOpMode {
 
                     // For RED1, with front against wall
                     // Identify location of shipping element/ducky
+                    mecanumDrive.holder.setPosition(.73);
                     mecanumDrive.box.setPosition(.90);
                     //lift up
                     mecanumDrive.moveLiftUp(500, 0.4);
                     //Move backward
+                    //mecanumDrive.moveBackward(3,true,5,0.4, telemetry);
+                    //mecanumDrive.rotateLeftSide(3, true,5,0.4,telemetry);
+                    //mecanumDrive.strafeRight(5, true,5, 0.4, telemetry);
+                    //mecanumDrive.moveBackward(1,true,5,0.4,telemetry);
+                    //mecanumDrive.runCarousel(0.4);
+                    //sleep(5000);
+                    //mecanumDrive.runCarousel(0);
+                    // mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
+                    sleep(500);
+                    mecanumDrive.box.setPosition(.66);
+                    //Move backward
                     mecanumDrive.moveBackward(5, true, 5, 0.4, telemetry);
                     //Strafe Right
-                    mecanumDrive.strafeRight(10, true, 5, 0.4, telemetry);
+                    mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
                     //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.moveBackward(2, true, 5, 0.2, telemetry);
+                    mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);
                     //Move lifter as
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
-                    sleep(3000);
+                    sleep(1500);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                     // Move forwaard slightly
@@ -168,7 +180,7 @@ public class Autonomus2021_BL extends LinearOpMode {
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.8);
                     //turn left 90 degrees
-                    mecanumDrive.rotateLeftSide(7, true, 5, 0.4, telemetry);
+                    mecanumDrive.rotateRightSide(7, true, 5, 0.4, telemetry);
                     //Go foward and park in the warehouse
                     mecanumDrive.moveForward(21, true, 5, 1, telemetry);
                     //puting box back to floor to prepare for tele op

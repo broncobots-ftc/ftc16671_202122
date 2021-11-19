@@ -140,6 +140,7 @@ public class Autonomus2021_RL extends LinearOpMode {
                     }
                     // For RED1, with front against wall
                     // Identify location of shipping element/ducky
+                    mecanumDrive.holder.setPosition(.73);
                     mecanumDrive.box.setPosition(.90);
                     //lift up
                     mecanumDrive.moveLiftUp(500, 0.4);
@@ -156,7 +157,7 @@ public class Autonomus2021_RL extends LinearOpMode {
                     //Move lifter as
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
-                    sleep(2000);
+                    sleep(1500);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                     // Move forwaard slightly
@@ -167,13 +168,12 @@ public class Autonomus2021_RL extends LinearOpMode {
                     mecanumDrive.rotateLeftSide(7.5, true, 5, 0.4, telemetry);//3
                     //Go foward and park in the warehouse
                     mecanumDrive.moveBackward(15.5, true, 5, 0.4, telemetry);//12, 18, 7.2, 15
-                    mecanumDrive.moveBackward(2.4, true, 5, 0.2, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
-                    // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
-                    sleep(1000);
                     mecanumDrive.runCarousel(-0.4);
+                    mecanumDrive.moveBackward(2.0, true, 5, 0.2, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
+                    // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
                     sleep(5000);
                     mecanumDrive.strafeLeft(-9, true, 5, 0.4, telemetry);
-                    mecanumDrive.moveBackward(1.8, true, 5, 0.4, telemetry);
+                    mecanumDrive.moveBackward(1.9, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
                     sleep(750);
