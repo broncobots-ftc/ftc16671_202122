@@ -90,7 +90,7 @@ public class Autonomus2021_RL extends LinearOpMode {
          **/
         if (mecanumDrive.tfod != null) {
             mecanumDrive.tfod.activate();
-            mecanumDrive.tfod.setZoom(1.2, 1.78);
+            mecanumDrive.tfod.setZoom(1.0, 1.78);
             //tfod.setZoom(1, 16.0/9.0);
         }
         /** Wait for the game to begin */
@@ -151,29 +151,29 @@ public class Autonomus2021_RL extends LinearOpMode {
                     //Strafe Right
                     mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
                     //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);//1
+                    mecanumDrive.moveBackward(2.5, true, 5, 0.2, telemetry);//1
+                    mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
                     //Move lifter as
-                    mecanumDrive.moveLiftUp(1600, 0.4);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
                     sleep(2000);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                     // Move forwaard slightly
-                    mecanumDrive.moveForward(6, true, 5, 0.4, telemetry);//5
+                    mecanumDrive.moveForward(5, true, 5, 0.4, telemetry);//5
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.4);
                     //turn left 90 degrees
-                    mecanumDrive.rotateLeftSide(7.15, true, 5, 0.4, telemetry);//3
+                    mecanumDrive.rotateLeftSide(7.5, true, 5, 0.4, telemetry);//3
                     //Go foward and park in the warehouse
-                    mecanumDrive.moveBackward(15, true, 5, 0.4, telemetry);//12, 18, 7.2, 15
-                    mecanumDrive.moveBackward(2.6, true, 5, 0.2, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
+                    mecanumDrive.moveBackward(15.5, true, 5, 0.4, telemetry);//12, 18, 7.2, 15
+                    mecanumDrive.moveBackward(2.4, true, 5, 0.2, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                     // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
                     sleep(1000);
                     mecanumDrive.runCarousel(-0.4);
                     sleep(5000);
                     mecanumDrive.strafeLeft(-9, true, 5, 0.4, telemetry);
-                    mecanumDrive.moveBackward(2, true, 5, 0.4, telemetry);
+                    mecanumDrive.moveBackward(1.8, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
                     sleep(750);

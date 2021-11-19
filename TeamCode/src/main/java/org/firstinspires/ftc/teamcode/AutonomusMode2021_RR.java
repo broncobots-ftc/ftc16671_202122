@@ -252,6 +252,8 @@ public class AutonomusMode2021_RR extends LinearOpMode {
                     mecanumDrive.box.setPosition(.90);
                     //lift up
                     mecanumDrive.moveLiftUp(500, 0.4);
+                    sleep(500);
+                    mecanumDrive.box.setPosition(.66);
                     //Move backward
                     mecanumDrive.moveBackward(5, true, 5, 0.4, telemetry);
                     //Strafe Right

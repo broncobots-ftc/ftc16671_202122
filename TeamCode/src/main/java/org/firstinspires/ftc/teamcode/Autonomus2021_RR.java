@@ -154,6 +154,8 @@ public class Autonomus2021_RR extends LinearOpMode {
                     mecanumDrive.box.setPosition(.90);
                     //lift up
                     mecanumDrive.moveLiftUp(500, 0.4);
+                    sleep(500);
+                    mecanumDrive.box.setPosition(.66);
                     //Move backward
                     mecanumDrive.moveBackward(5, true, 5, 0.4, telemetry);
                     //Strafe Right
@@ -164,7 +166,7 @@ public class Autonomus2021_RR extends LinearOpMode {
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
                     // recognized by Vuforia and based on location of duck
                     //Use dropping function
-                    sleep(3000);
+                    sleep(1500);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                     // Move forwaard slightly

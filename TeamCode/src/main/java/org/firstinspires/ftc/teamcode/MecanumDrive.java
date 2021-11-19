@@ -1031,7 +1031,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
             height = 600;
 
         } else if (level == 2){
-            height = 1100; //900
+            height = 1000; //900,1100
         } else if (level == 3){
             height = 1800;
         }
