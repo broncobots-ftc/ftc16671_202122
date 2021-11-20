@@ -151,10 +151,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
         backRight = hwMap.get(DcMotor.class, "back_right_motor");
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //grabber = hwMap.get(Servo.class, "left_hand");
         backLeft.setDirection(DcMotor.Direction.REVERSE);

@@ -160,7 +160,7 @@ public class Autonomus2021_RL_Delay extends LinearOpMode {
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                     // Move forwaard slightly
-                    mecanumDrive.moveForward(5.6, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5
+                    mecanumDrive.moveForward(6.2, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.4);
                     //turn left 90 degrees
@@ -175,7 +175,7 @@ public class Autonomus2021_RL_Delay extends LinearOpMode {
                     mecanumDrive.moveBackward(1.9, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
-                    sleep(750);
+                    sleep(1200);
                     mecanumDrive.moveLiftUp(0, 0.4);
                     break;
 

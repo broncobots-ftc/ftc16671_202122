@@ -138,7 +138,7 @@ public class MecanumDriveOpMode extends OpMode {
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(.97);
             //wait for some milliseconds
-            justWait(1000);//1000,750,825,900
+            justWait(1050);//1000,750,825,900,950,
             mecanumDrive.lift.setTargetPosition(35);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);

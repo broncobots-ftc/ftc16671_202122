@@ -176,7 +176,7 @@ public class Autonomus2021_BR extends LinearOpMode {
                     //turn left 90 degrees
                     mecanumDrive.rotateRightSide(14.3,true,5,0.4,telemetry);//3
                     //Go foward and park in the warehouse
-                    mecanumDrive.strafeRight(18,true,5,0.4,telemetry);//12, 18, 7.2
+                    mecanumDrive.strafeRight(19,true,5,0.4,telemetry);//12, 18, 7.2
                     mecanumDrive.strafeRight(2, true, 5, 0.1,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                     // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
                     mecanumDrive.runCarousel(-0.4);
@@ -185,7 +185,7 @@ public class Autonomus2021_BR extends LinearOpMode {
                     mecanumDrive.strafeRight(3, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
-                    sleep(750);
+                    sleep(1200);
                     mecanumDrive.moveLiftUp(0,0.4);
                     break;
 
