@@ -132,7 +132,7 @@ public class MecanumDriveOpMode extends OpMode {
             mecanumDrive.box.setPosition(0.66);
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
-        //left bumper is 0 to 1, right bumper is 1 to 0
+        //left bumper is 0 to 1, right bumper is 1 to 0//jsut to commit
         if(gamepad2.right_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
