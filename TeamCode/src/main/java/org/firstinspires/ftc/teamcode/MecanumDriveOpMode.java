@@ -105,7 +105,7 @@ public class MecanumDriveOpMode extends OpMode {
         //carousel spins when b is activated
         if (gamepad1.b){
             //mecanumDrive.intake.setTargetPosition(4000000);
-            mecanumDrive.carousel.setPower(0.5);
+            mecanumDrive.carousel.setPower(-0.5);
             telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //carousel spins other way when x is activated
@@ -138,7 +138,7 @@ public class MecanumDriveOpMode extends OpMode {
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(.97);
             //wait for some milliseconds
-            justWait(1000);
+            justWait(1000);//1000,750,825,900
             mecanumDrive.lift.setTargetPosition(35);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
@@ -174,7 +174,7 @@ public class MecanumDriveOpMode extends OpMode {
         if(gamepad2.x) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
             telemetry.addData("X Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            mecanumDrive.lift.setTargetPosition(1750);
+            mecanumDrive.lift.setTargetPosition(1800);//1600, 1750,1800
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(1);
 

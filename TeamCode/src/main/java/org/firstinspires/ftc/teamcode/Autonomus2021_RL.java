@@ -148,7 +148,7 @@ public class Autonomus2021_RL extends LinearOpMode {
                     sleep(500);
                     mecanumDrive.box.setPosition(.66);
                     //commit does not work
-                    mecanumDrive.moveBackward(5.6, true, 5, 0.4, telemetry);//7
+                    mecanumDrive.moveBackward(5.3, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4
                     //Strafe Right
                     mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
                     //Move backward (make sure to contact the shipping hub)
@@ -161,11 +161,11 @@ public class Autonomus2021_RL extends LinearOpMode {
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
                     // Move forwaard slightly
-                    mecanumDrive.moveForward(5.7, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7
+                    mecanumDrive.moveForward(5.6, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.4);
                     //turn left 90 degrees
-                    mecanumDrive.rotateLeftSide(7.5, true, 5, 0.4, telemetry);//3
+                    mecanumDrive.rotateLeftSide(7.4, true, 5, 0.4, telemetry);//3, 7.5, 7.3
                     //Go foward and park in the warehouse
                     mecanumDrive.moveBackward(15.5, true, 5, 0.4, telemetry);//12, 18, 7.2, 15
                     mecanumDrive.runCarousel(-0.4);
