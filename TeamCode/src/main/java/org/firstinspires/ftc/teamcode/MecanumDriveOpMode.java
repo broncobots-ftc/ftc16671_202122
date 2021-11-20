@@ -174,7 +174,7 @@ public class MecanumDriveOpMode extends OpMode {
         if(gamepad2.x) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
             telemetry.addData("X Position", "position=" + mecanumDrive.lift.getCurrentPosition());
-            mecanumDrive.lift.setTargetPosition(1600);
+            mecanumDrive.lift.setTargetPosition(1750);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(1);
 

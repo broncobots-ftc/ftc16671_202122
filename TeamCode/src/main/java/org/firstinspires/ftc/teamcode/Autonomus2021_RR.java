@@ -141,6 +141,7 @@ public class Autonomus2021_RR extends LinearOpMode {
                                 float totalHeight = recognition.getHeight();
                                 float leftSide = recognition.getLeft();
                                 level = mecanumDrive.detectDuckLevel(leftSide, recognition.getLabel());
+                                //level = mecanumDrive.detectElementLevel(leftSide, recognition.getLabel());
                                 telemetry.addData("Level : ", level);
                                 i++;
                             }

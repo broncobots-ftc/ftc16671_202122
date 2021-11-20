@@ -15,7 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
  public class MecanumDrive {
-    DcMotor frontLeft;
+
+     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backRight;
     DcMotor backLeft;
@@ -37,8 +38,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
              "Duck",
              "Marker"
     };
-
+//LABELS
     private static final String LABEL_DUCK = "Duck";
+     private static final String LABEL_MARKER = "Marker";
 
 
 
@@ -172,8 +174,11 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     void initCarousel_and_lift(HardwareMap hwMap){
         lift = hwMap.get(DcMotor.class, "lifter");//
         carousel = hwMap.get(DcMotor.class, "carousel");
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        carousel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         carousel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     void initIntake(HardwareMap hwMap){
@@ -288,6 +293,44 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 
     }
+
+     public void moveForward(double distanceInInches, boolean isOpModeActive, int timeoutS, double speed, Telemetry telemetry){
+
+         //get current position for all motors so we can start from there
+         flPos = frontLeft.getCurrentPosition();
+         frPos = frontRight.getCurrentPosition();
+         blPos = backLeft.getCurrentPosition();
+         brPos = backRight.getCurrentPosition();
+
+         // calculate new targets
+         flPos += distanceInInches * COUNTS_PER_INCH;
+         frPos += distanceInInches * COUNTS_PER_INCH;
+         blPos += distanceInInches * COUNTS_PER_INCH;
+         brPos += distanceInInches * COUNTS_PER_INCH;
+
+         //now since we have right positions for all motors, set target positions for all motors
+         frontLeft.setTargetPosition(flPos);
+         frontRight.setTargetPosition(frPos);
+         backLeft.setTargetPosition(blPos);
+         backRight.setTargetPosition(brPos);
+
+         setAllMotorsToRunToPosition();
+         runtime.reset();
+         setSpeeds(speed, speed,speed,speed);
+         while (runtime.seconds() < timeoutS &&
+                 (frontLeft.isBusy() && frontRight.isBusy())) {
+             //wait or print something in telemetry
+             telemetry.addLine("Moving forward...");
+             telemetry.addData("Target", "%7d :%7d", flPos, frPos, blPos, brPos);
+             telemetry.addData("Actual", "%7d :%7d", frontLeft.getCurrentPosition(),
+                     frontRight.getCurrentPosition(), backLeft.getCurrentPosition(),
+                     backRight.getCurrentPosition());
+             //telemetry.update();
+         }
+         setSpeeds(0,0,0,0);
+
+
+     }
 
     /**
      * Move specific distance (in inches) backwards with specific speed.     *
@@ -1019,6 +1062,25 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
         return level;
     }
 
+     /**
+      * This method is to detect the marcker and set level accordingly
+      * @param leftSide
+      * @param elementLabel
+      * @return
+      */
+     public int detectElementLevel(float leftSide, String elementLabel){
+         int level = 1;
+         if(LABEL_MARKER.equals(elementLabel)) {
+             if (leftSide > 90 && leftSide < 250) {
+                 level = 2;
+             } else if (leftSide > 300) {
+                 level = 3;
+             } else {
+                 level = 1;
+             }
+         }
+         return level;
+     }
     /**
      *
      *
