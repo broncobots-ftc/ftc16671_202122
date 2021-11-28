@@ -21,8 +21,8 @@ public class pidBronco extends LinearOpMode{
 
     double integralSum = 0;
     double Kp = 10;
-    double Ki = 0;
-    double Kd = 0;
+    double Ki = 3;
+    double Kd = 10;
 
     ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
