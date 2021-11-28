@@ -180,9 +180,9 @@ public class Autonomus2021_BR_Delay extends LinearOpMode {
                     mecanumDrive.strafeRight(19,true,5,0.4,telemetry);//12, 18, 7.2
                     mecanumDrive.strafeRight(2, true, 5, 0.1,telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                     // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
-                    mecanumDrive.runCarousel(-0.4);
+                    mecanumDrive.runCarousel(0.4);
                     sleep(5000);
-                    mecanumDrive.moveForward(8,true, 5,0.4,telemetry);
+                    mecanumDrive.moveForward(7.3,true, 5,0.4,telemetry);//8
                     mecanumDrive.strafeRight(3, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);

@@ -111,7 +111,7 @@ public class MecanumDriveOpMode extends OpMode {
         //carousel spins other way when x is activated
         if (gamepad1.x){
             //mecanumDrive.intake.setTargetPosition(-4000000);
-            mecanumDrive.carousel.setPower(-0.5);
+            mecanumDrive.carousel.setPower(0.5);
             telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
 
@@ -240,6 +240,21 @@ public class MecanumDriveOpMode extends OpMode {
         telemetry.addData("distance fwd", distances[0]);
         telemetry.addData("distance right", distances[1]);
         telemetry.update();
+
+        telemetry.addData("liftcurrentpos",  mecanumDrive.lift.getCurrentPosition());
+        telemetry.update();
+        if(gamepad2.right_trigger > 0){
+           int currPos =  mecanumDrive.lift.getCurrentPosition();
+            mecanumDrive.lift.setTargetPosition(currPos - 10);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            mecanumDrive.lift.setPower(0.2);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //mecanumDrive.lift.setPower(0.1);
+        }
+
+
     }
 
     /**

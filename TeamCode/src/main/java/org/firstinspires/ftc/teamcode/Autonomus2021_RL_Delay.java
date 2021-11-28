@@ -135,7 +135,7 @@ public class Autonomus2021_RL_Delay extends LinearOpMode {
 
                         }
                     }
-                    sleep(6000);
+                    sleep(8000);
 
                     // For RED1, with front against wall
                     // Identify location of shipping element/ducky
