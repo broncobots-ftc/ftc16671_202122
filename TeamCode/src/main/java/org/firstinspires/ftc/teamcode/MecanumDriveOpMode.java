@@ -249,7 +249,7 @@ public class MecanumDriveOpMode extends OpMode {
            justWait(1000);
            mecanumDrive.lift.setTargetPosition(currPos - 10);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(0.2);
+            mecanumDrive.lift.setPower(0.1);//it was 0.2
             mecanumDrive.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);

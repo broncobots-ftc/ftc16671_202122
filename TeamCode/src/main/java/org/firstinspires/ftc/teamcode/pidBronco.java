@@ -20,9 +20,9 @@ public class pidBronco extends LinearOpMode{
     private BNO055IMU imu;
 
     double integralSum = 0;
-    double Kp = 10;
-    double Ki = 3;
-    double Kd = 10;
+    double Kp = 2;
+    double Ki = 1;
+    double Kd = 1;
 
     ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
@@ -73,7 +73,6 @@ public class pidBronco extends LinearOpMode{
 
     public double PIDControl(double reference, double state){
         double error = angleWrap(reference - state);
-        integralSum += error * timer.seconds();
         double derivative = (error - lastError) / timer.seconds();
         lastError = error;
 

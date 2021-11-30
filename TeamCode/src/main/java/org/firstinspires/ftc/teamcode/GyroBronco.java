@@ -5,6 +5,7 @@
  */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -18,16 +19,17 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
+@Autonomous(name = "Gyro48in", group = "ftc16671")
 
 public class GyroBronco extends LinearOpMode{
     /* Declare OpMode members. */
-    HardwareBroncobots robot   = new HardwareBroncobots();   // Use Hardware Broncobots hardware
+    MecanumDrive robot   = new MecanumDrive();   // Use Hardware Broncobots hardware
     ModernRoboticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
     static final double     COUNTS_PER_MOTOR_REV    = 28 ;    // eg: rev Encoder
     //static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: rev Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP. previously it was 2
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
@@ -39,6 +41,8 @@ public class GyroBronco extends LinearOpMode{
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
+    private BNO055IMU imu;
+
 
 
 
@@ -52,12 +56,22 @@ public class GyroBronco extends LinearOpMode{
          */
 
         robot.init(hardwareMap);
+
+
+
+
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("imu");
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+//        imu = hardwareMap.get(BNO055IMU.class, "imu");
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//        parameters.mode = BNO055IMU.SensorMode.IMU ;
+//        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+//        imu.initialize((parameters));
 
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
@@ -70,7 +84,7 @@ public class GyroBronco extends LinearOpMode{
             sleep(50);
             idle();
         }
-        telemetry.addData(">", "Robot Ready.");    //
+        telemetry.addData(">", "Robot Ready");    //
         telemetry.update();
 
         robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
