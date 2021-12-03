@@ -53,10 +53,12 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 //LABELS
     private static final String LABEL_DUCK = "Duck";
      private static final String LABEL_MARKER = "Marker";
+     private static final String LABEL_CAPSTONE = "capstone";
 
 
 
-    private double fast = 1.0; // Limit motor power to this value for Andymark RUN_USING_ENCODER mode
+
+     private double fast = 1.0; // Limit motor power to this value for Andymark RUN_USING_ENCODER mode
     private double medium = 0.7; // medium speed
 
     private double slow = 0.4; // slow speed
@@ -1107,7 +1109,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
       */
      public int detectElementLevel(float leftSide, String elementLabel){
          int level = 1;
-         if(LABEL_MARKER.equals(elementLabel)) {
+         if(LABEL_CAPSTONE.equals(elementLabel)) {
              if (leftSide > 90 && leftSide < 250) {
                  level = 2;
              } else if (leftSide > 300) {
