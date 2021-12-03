@@ -32,6 +32,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     Servo box;//box to hold cubes and balls
 
      private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+     //private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDS.tflite";
+
 
      private static final String[] LABELS = {
              "Ball",
@@ -39,6 +41,15 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
              "Duck",
              "Marker"
     };
+    /*
+     private static final String[] LABELS = {
+             "ball",
+             "cube",
+             "duck",
+             "capstone"
+     };
+     */
+
 //LABELS
     private static final String LABEL_DUCK = "Duck";
      private static final String LABEL_MARKER = "Marker";
