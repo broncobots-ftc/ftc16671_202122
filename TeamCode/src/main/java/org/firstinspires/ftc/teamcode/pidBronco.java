@@ -20,7 +20,7 @@ public class pidBronco extends LinearOpMode{
     private BNO055IMU imu;
 
     double integralSum = 0;
-    double Kp = 2;
+    double Kp = 10;
     double Ki = 1;
     double Kd = 1;
 

@@ -1,241 +1,232 @@
-/*This file is to run autonomous for the Broncobots team
- *
- *By Guga
- * 11/29/2021
- */
+//Autonomous mode Guga 12/2/2021
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+@Autonomous(name = "GyroBronco")
+public class GyroBronco extends LinearOpMode {
 
-
-//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
-
-@Autonomous(name = "Gyro48in", group = "ftc16671")
-
-public class GyroBronco extends LinearOpMode{
-    /* Declare OpMode members. */
-    MecanumDrive robot   = new MecanumDrive();   // Use Hardware Broncobots hardware
-    ModernRoboticsI2cGyro   gyro    = null;                    // Additional Gyro device
-
-    static final double     COUNTS_PER_MOTOR_REV    = 28 ;    // eg: rev Encoder
-    //static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: rev Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP. previously it was 2
-    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-
-    // These constants define the desired driving/control characteristics
-    // The can/should be tweaked to suite the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.7;     // Nominal speed for better accuracy.
-    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
-
-    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
+    private DcMotor front_left_motor;
+    private DcMotor back_left_motor;
+    private DcMotor front_right_motor;
+    private DcMotor back_right_motor;
     private BNO055IMU imu;
 
 
+    float xOrientation;
+    //float encoderResolution= =((((1+(46/17))) * (1+(46/11))) * 28);
+    //float wheelRevolution = (2*3.14159265359*95)/25.4 ;
 
-
-
-
+    /**
+     * This function is executed when this Op Mode is selected from the Driver Station.
+     */
     @Override
-    public void runOpMode() throws InterruptedException {
-        /*
-         * Initialize the standard drive system variables.
-         * use init()
-         */
-
-        robot.init(hardwareMap);
-
+    public void runOpMode() {
+        front_left_motor = hardwareMap.get(DcMotor.class, "front_left_motor");
+        back_left_motor = hardwareMap.get(DcMotor.class, "back_left_motor");
+        front_right_motor = hardwareMap.get(DcMotor.class, "front_right_motor");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        back_right_motor = hardwareMap.get(DcMotor.class, "back_right_motor");
 
 
-
-        gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("imu");
-        // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-//        imu = hardwareMap.get(BNO055IMU.class, "imu");
-//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-//        parameters.mode = BNO055IMU.SensorMode.IMU ;
-//        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-//        imu.initialize((parameters));
-
-        // Send telemetry message to alert driver that we are calibrating;
-        telemetry.addData(">", "Calibrating Gyro");    //
-        telemetry.update();
-
-        gyro.calibrate();
-
-        // make sure the gyro is calibrated before continuing
-        while (!isStopRequested() && gyro.isCalibrating())  {
-            sleep(50);
-            idle();
-        }
-        telemetry.addData(">", "Robot Ready");    //
-        telemetry.update();
-
-        robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-        // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-        while (!isStarted()) {
-            telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
-            telemetry.update();
-        }
-
-        gyro.resetZAxisIntegrator();
-
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        // Put a hold after each turn
-        gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 48 inches
-        //gyroTurn( TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
-        //gyroHold( TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
-        //gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
-        //gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
-        //gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        //gyroTurn( TURN_SPEED,   0.0);         // Turn  CW  to   0 Degrees
-        //gyroHold( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-        //gyroDrive(DRIVE_SPEED,-48.0, 0.0);    // Drive REV 48 inches
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-
-
-    }
-
-    /**
-     *          *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-     *          *  Move will stop if either of these conditions occur:
-     *          *  1) Move gets to the desired position
-     *          *  2) Driver stops the opmode running.
-     *          *
-     *          * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-     *          * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
-     *          * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *          *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *          *                   If a relative angle is required, add/subtract from current heading.
-     *
-     */
-    public void gyroDrive ( double speed,
-                            double distance,
-                            double angle) {
-
-        int     newLeftTarget;
-        int     newRightTarget;
-        int     moveCounts;
-        double  max;
-        double  error;
-        double  steer;
-        double  leftSpeed;
-        double  rightSpeed;
-
-        // Ensure that the opmode is still active
+        // Reveser direction of left motor
+        front_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        back_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Place into braking mode so robot stops abruptly
+        front_left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        front_right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        back_left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        back_right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Init the IMU
+        // Current X orientation to zero- X is upward.  The robot direction will be zero until we do something to change it.
+        init_IMU();
+        // Robots direction will be zero until we do something
+        // Wait for driver to press start button
+        waitForStart();
         if (opModeIsActive()) {
+            telemetry.addData("X axis angle ", getXAxisOrientation());
+            telemetry.addData("Y axis angle ", getYAxisOrientation());
+            telemetry.addData("Z axis angle ", getZAxisOrientation());
+            telemetry.update();
+            sleep(2000);
+            // To travel 24 in, we need = 2.02 x 537.7 pulses
+            Move_to_Position(2.02 * 537.7);
+            telemetry.addData("after first move", " ");
+            telemetry.addData("X axis angle ", getXAxisOrientation());
+            telemetry.addData("Y axis angle ", getYAxisOrientation());
+            telemetry.addData("Z axis angle ", getZAxisOrientation());
+            telemetry.update();
+            sleep(2000);
+            // turn CW unti you reach 90
+            rotateCW(90);
+            telemetry.addData("after rotate", " ");
+            telemetry.addData("X axis angle ", getXAxisOrientation());
+            telemetry.addData("Y axis angle ", getYAxisOrientation());
+            telemetry.addData("Z axis angle ", getZAxisOrientation());
+            telemetry.update();
+            sleep(2000);
+            //rotateCW(90);
+            // To travel 24 in, we need = 2.02 x 537.7 pulses
+            Move_to_Position(2.02 * 537.7);
+            telemetry.addData("last move", " ");
+            telemetry.addData("X axis angle ", getXAxisOrientation());
+            telemetry.addData("Y axis angle ", getYAxisOrientation());
+            telemetry.addData("Z axis angle ", getZAxisOrientation());
+            telemetry.update();
 
-            // Determine new target position, and pass to motor controller
-            moveCounts = (int)(distance * COUNTS_PER_INCH);
-            newLeftTarget = robot.frontLeft.getCurrentPosition() + moveCounts;
-            newRightTarget = robot.frontRight.getCurrentPosition() + moveCounts;
 
-            // Set Target and Turn On RUN_TO_POSITION
-            robot.frontLeft.setTargetPosition(newLeftTarget);
-            robot.frontRight.setTargetPosition(newRightTarget);
-
-            robot.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // start motion.
-            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
-            robot.frontLeft.setPower(speed);
-            robot.frontRight.setPower(speed);
-
-            // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                    (robot.frontLeft.isBusy() && robot.frontRight.isBusy())) {
-
-                // adjust relative speed based on heading error.
-                error = getError(angle);
-                steer = getSteer(error, P_DRIVE_COEFF);
-
-                // if driving in reverse, the motor correction also needs to be reversed
-                if (distance < 0)
-                    steer *= -1.0;
-
-                leftSpeed = speed - steer;
-                rightSpeed = speed + steer;
-
-                // Normalize speeds if either one exceeds +/- 1.0;
-                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-                if (max > 1.0)
-                {
-                    leftSpeed /= max;
-                    rightSpeed /= max;
-                }
-
-                robot.frontLeft.setPower(leftSpeed);
-                robot.frontRight.setPower(rightSpeed);
-
-                // Display drive status for the driver.
-                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
-                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
-                telemetry.addData("Actual",  "%7d:%7d",      robot.frontLeft.getCurrentPosition(),
-                        robot.frontRight.getCurrentPosition());
-                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            robot.frontLeft.setPower(0);
-            robot.frontRight.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
     /**
-     * getError determines the error between the target angle and the robot's current heading
-     * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
-     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     * initialize imu...
      */
-    public double getError(double targetAngle) {
+    private void init_IMU() {
+        BNO055IMU.Parameters IMUparameters;
 
-        double robotError;
-
-        // calculate error in -179 to +180 range  (
-        robotError = targetAngle - gyro.getIntegratedZValue();
-        while (robotError > 180)  robotError -= 360;
-        while (robotError <= -180) robotError += 360;
-        return robotError;
+        // Create a new IMU parameter object
+        IMUparameters = new BNO055IMU.Parameters();
+        // Set the imu mode to imu so automatically calibrate itself
+        IMUparameters.mode = BNO055IMU.SensorMode.IMU;
+        // Use degrees as angle unit
+        IMUparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        // use meters per seconds^2 for units of acceleration
+        IMUparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        // Warn driver it may take several seconds
+        telemetry.addData("Status", "Init IMU... Please Wait");
+        telemetry.update();
+        // Initialize IMU using these parameters
+        imu.initialize(IMUparameters);
+        // Tell Drive the init is done
+        telemetry.addData("Status", "IMU initialized");
+        telemetry.update();
     }
 
+    /**
+     * Move to a position.  We need to get the correct pulse and wheel diameter.  ...
+     */
+    private void Move_to_Position(double TargetPosition) {
+        // Reset the encoders
+        front_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Put the motor in encoder mode
+        front_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        front_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // Turn on moters using moderate power
+        front_left_motor.setPower(0.3);
+        front_right_motor.setPower(0.3);
+        back_left_motor.setPower(0.3);
+        back_right_motor.setPower(0.3);
+        // Loop until the motor reaches its target position
+        while (front_left_motor.getCurrentPosition() < TargetPosition) {
+            // Nothing while the robot moves forward
+        }
+        front_left_motor.setPower(0);
+        front_right_motor.setPower(0);
+        back_left_motor.setPower(0);
+        back_right_motor.setPower(0);
+        // sleep quarter of seconds to let the robot sleep
+        sleep(250);
+    }
 
     /**
-     * returns desired steering force.  +/- 1 range.  +ve = steer left
-     * @param error   Error angle in robot relative degrees
-     * @param PCoeff  Proportional Gain Coefficient
-     * @return
+     * Get the orientation of the axis.  Here X is up vertical.
      */
-    public double getSteer(double error, double PCoeff) {
-        return Range.clip(error * PCoeff, -1, 1);
+    private float getXAxisOrientation() {
+        Orientation Angles;
+
+        // Get X axis orientation of the IMU.  Typically Z is the Yaw, but here in our robot, we have X axis is vertically Upward
+        // we stand behind the robot, the rev stay flat, first at the bottom, right sensor, left motor, ZYX, but here for us it is XYZ
+        Angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+        return Angles.firstAngle;
+    }
+
+    private float getYAxisOrientation() {
+        Orientation Angles;
+
+        // Get X axis orientation of the IMU.  Typically Z is the Yaw, but here in our robot, we have X axis is vertically Upward
+        // we stand behind the robot, the rev stay flat, first at the bottom, right sensor, left motor, ZYX, but here for us it is XYZ
+        Angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        return Angles.secondAngle;
+    }
+
+    private float getZAxisOrientation() {
+        Orientation Angles;
+
+        // Get X axis orientation of the IMU.  Typically Z is the Yaw, but here in our robot, we have X axis is vertically Upward
+        // we stand behind the robot, the rev stay flat, first at the bottom, right sensor, left motor, ZYX, but here for us it is XYZ
+        Angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        return Angles.thirdAngle;
+    }
+
+    /**
+     * This function is to rotate clockwise..
+     */
+    private void rotateCCW(int targetOrientationAngle) {
+        // Rotate in CCW direction
+        // Assume we have not turned more than 180 degree
+        // Get initial orientation about the X axis in our robot which is verticle upward
+        xOrientation = getXAxisOrientation();
+        // Set power to robot rotate in CCW direction
+        front_left_motor.setPower(-0.8);
+        back_left_motor.setPower(-0.8);
+        front_right_motor.setPower(0.8);
+        back_right_motor.setPower(0.8);
+        // loop until we reach the target orientation
+        while (xOrientation < targetOrientationAngle) {
+            // Update current orientation about X
+            xOrientation = getXAxisOrientation();
+        }
+        // stop the motors
+        front_left_motor.setPower(0);
+        back_left_motor.setPower(0);
+        front_right_motor.setPower(0);
+        back_right_motor.setPower(0);
+        // wait a moment for the robot to stop
+        sleep(250);
+    }
+
+    /**
+     * Counterclockwise rotation.
+     */
+    private void rotateCW(float targetOrientationAngle) {
+        // Rotate in CW direction
+        // Assume we have not turned more than 180 degree
+        // Get initial orientation about the X axis in our robot which is verticle upward
+        xOrientation = getXAxisOrientation();
+        if(Math.abs(xOrientation) != 0){
+            targetOrientationAngle = targetOrientationAngle - xOrientation;
+        }
+        // Set power to robot rotate in CCW direction
+        front_left_motor.setPower(0.8);
+        back_left_motor.setPower(0.8);
+        front_right_motor.setPower(-0.8);
+        back_right_motor.setPower(-0.8);
+        // loop until we reach the target orientation
+        while (xOrientation < targetOrientationAngle) {
+            // Update current orientation about X
+            xOrientation = getXAxisOrientation();
+        }
+        // stop the motors
+        front_left_motor.setPower(0);
+        back_left_motor.setPower(0);
+        front_right_motor.setPower(0);
+        back_right_motor.setPower(0);
+        // wait a moment for the robot to stop
+        sleep(250);
     }
 }

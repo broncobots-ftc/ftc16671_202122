@@ -239,19 +239,19 @@ public class MecanumDriveOpMode extends OpMode {
         distances = mecanumDrive.getDistanceCm();
         telemetry.addData("distance fwd", distances[0]);
         telemetry.addData("distance right", distances[1]);
-        telemetry.update();
+        //telemetry.update();
 
         telemetry.addData("liftcurrentpos",  mecanumDrive.lift.getCurrentPosition());
         telemetry.update();
-        if(gamepad2.right_trigger > 0){
+        if(gamepad1.y){
            int currPos =  mecanumDrive.lift.getCurrentPosition();
            mecanumDrive.box.setPosition(1);
            justWait(1000);
-           mecanumDrive.lift.setTargetPosition(currPos - 10);
+           mecanumDrive.lift.setTargetPosition(currPos - 100);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.1);//it was 0.2
-            mecanumDrive.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //mecanumDrive.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //mecanumDrive.lift.setPower(0.1);
         }

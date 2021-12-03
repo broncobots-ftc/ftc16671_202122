@@ -1,6 +1,7 @@
  package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -98,6 +99,31 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
       */
      protected TFObjectDetector tfod;
 
+     private BNO055IMU imu;
+
+
+     /**
+      * initialize imu...
+      */
+     private void init_IMU(Telemetry telemetry){
+         BNO055IMU.Parameters IMUparameters;
+         // Create a new IMU parameter object
+         IMUparameters = new BNO055IMU.Parameters();
+         // Set the imu mode to imu so automatically calibrate itself
+         IMUparameters.mode = BNO055IMU.SensorMode.IMU;
+         // Use degrees as angle unit
+         IMUparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+         // use meters per seconds^2 for units of acceleration
+         IMUparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+         // Warn driver it may take several seconds
+         telemetry.addData("Status", "Init IMU... Please Wait");
+         telemetry.update();
+         // Initialize IMU using these parameters
+         imu.initialize(IMUparameters);
+         // Tell Drive the init is done
+         telemetry.addData("Status", "IMU initialized");
+         telemetry.update();
+     }
 
      /**
       * Initialize the Vuforia localization engine.
