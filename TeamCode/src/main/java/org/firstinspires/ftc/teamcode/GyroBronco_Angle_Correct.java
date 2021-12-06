@@ -23,10 +23,15 @@ public class GyroBronco_Angle_Correct extends LinearOpMode {
     private BNO055IMU imu;
 
 
+    float encoderResolution = ((((1+(46/17))) * (1+(46/11))) * 28) ; // 1 revolution is 537.7 Pulse per revolution
+    double pulsePerInch = encoderResolution*((3.141592*96)/25.4);
+
+
+
     float xOrientation;
     float targetOrientationAngle;
     Orientation lastAngles = new Orientation();
-    double globalAngle, power = 0.3, correction;
+    double globalAngle, power = 0.1, correction;
     //float encoderResolution= =((((1+(46/17))) * (1+(46/11))) * 28);
     //float wheelRevolution = (2*3.14159265359*95)/25.4 ;
 
@@ -38,8 +43,9 @@ public class GyroBronco_Angle_Correct extends LinearOpMode {
         front_left_motor = hardwareMap.get(DcMotor.class, "front_left_motor");
         back_left_motor = hardwareMap.get(DcMotor.class, "back_left_motor");
         front_right_motor = hardwareMap.get(DcMotor.class, "front_right_motor");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
         back_right_motor = hardwareMap.get(DcMotor.class, "back_right_motor");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+
 
 
         // Reveser direction of left motor
@@ -66,10 +72,8 @@ public class GyroBronco_Angle_Correct extends LinearOpMode {
 //            telemetry.addData("Z axis angle ", getZAxisOrientation());
 //            telemetry.update();
             // To travel 24 in, we need = 2.02 x 537.7 pulses
-            Move_to_Position_Back(-3.285 * 537.7);
-            telemetry.addData("current position ", back_left_motor.getCurrentPosition());
-//            sleep(250);
-//            //Turn_left_to_Position(1.5 * 537.7);
+            Move_to_Position_Back(2.02 * 537.7);
+            //Turn_left_to_Position(1.5 * 537.7);
 //            //sleep(250);
 //            Move_to_Position(2.02 * 537.7);
 //            //sleep(250);
@@ -142,6 +146,8 @@ public class GyroBronco_Angle_Correct extends LinearOpMode {
 
         // Loop until the motor reaches its target position
         while (front_left_motor.getCurrentPosition() < TargetPosition) {
+            telemetry.addData("current front left wheel pos", front_left_motor.getCurrentPosition());
+            telemetry.update();
             // Nothing while the robot moves forward
         }
         front_left_motor.setPower(0);
