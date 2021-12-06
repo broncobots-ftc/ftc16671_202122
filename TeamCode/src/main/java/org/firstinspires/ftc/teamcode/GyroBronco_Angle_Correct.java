@@ -66,13 +66,21 @@ public class GyroBronco_Angle_Correct extends LinearOpMode {
 //            telemetry.addData("Z axis angle ", getZAxisOrientation());
 //            telemetry.update();
             // To travel 24 in, we need = 2.02 x 537.7 pulses
-            Move_to_Position(2.02 * 537.7);
-            sleep(250);
-            Turn_left_to_Position(1.5 * 537.7);
-            sleep(250);
-            Move_to_Position(2.02 * 537.7);
-            sleep(250);
-            Turn_right_to_Position(1.5 * 537.7);
+            Move_to_Position_Back(-3.285 * 537.7);
+            telemetry.addData("current position ", back_left_motor.getCurrentPosition());
+//            sleep(250);
+//            //Turn_left_to_Position(1.5 * 537.7);
+//            //sleep(250);
+//            Move_to_Position(2.02 * 537.7);
+//            //sleep(250);
+//            Turn_right_to_Position(1.5 * 537.7);
+//            sleep(250);
+//            //Move_to_Position_Back(-.673 * 537.7);
+//            sleep(250);
+//            Move_to_Position(2.358 * 537.7);
+//            //turnclockwise
+//            Turn_right_to_Position(3.2 * 537.7);
+
             telemetry.addData("X axis angle ", getXAxisOrientation());
             telemetry.update();
 //            // turn CW unti you reach 90
@@ -123,17 +131,49 @@ public class GyroBronco_Angle_Correct extends LinearOpMode {
         back_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Turn on moters using moderate power
-//        front_left_motor.setPower(0.3);
-//        front_right_motor.setPower(0.3);
-//        back_left_motor.setPower(0.3);
-//        back_right_motor.setPower(0.3);
-        front_left_motor.setPower(power-correction);
-        back_left_motor.setPower(power-correction);
-        front_right_motor.setPower(power+correction);
-        back_right_motor.setPower(power+correction);
+        front_left_motor.setPower(power);
+        front_right_motor.setPower(power);
+        back_left_motor.setPower(power);
+        back_right_motor.setPower(power);
+//        front_left_motor.setPower(power-correction);
+//        back_left_motor.setPower(power-correction);
+//        front_right_motor.setPower(power+correction);
+//        back_right_motor.setPower(power+correction);
 
         // Loop until the motor reaches its target position
         while (front_left_motor.getCurrentPosition() < TargetPosition) {
+            // Nothing while the robot moves forward
+        }
+        front_left_motor.setPower(0);
+        front_right_motor.setPower(0);
+        back_left_motor.setPower(0);
+        back_right_motor.setPower(0);
+        // sleep quarter of seconds to let the robot sleep
+        sleep(250);
+    }
+    private void Move_to_Position_Back(double TargetPosition) {
+        // Reset the encoders
+        front_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        front_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        back_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Put the motor in encoder mode
+        front_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        front_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // Turn on moters using moderate power
+        front_left_motor.setPower(-power);
+        front_right_motor.setPower(-power);
+        back_left_motor.setPower(-power);
+        back_right_motor.setPower(-power);
+//        front_left_motor.setPower(power-correction);
+//        back_left_motor.setPower(power-correction);
+//        front_right_motor.setPower(power+correction);
+//        back_right_motor.setPower(power+correction);
+
+        // Loop until the motor reaches its target position
+        while (back_left_motor.getCurrentPosition() > TargetPosition) {
             // Nothing while the robot moves forward
         }
         front_left_motor.setPower(0);

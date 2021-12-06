@@ -120,15 +120,19 @@ public class MecanumDriveOpMode extends OpMode {
         }
 
 
-        //left bumper is 0 to 1, right bumper is 1 to 0
+        //left bumper is 0 (floor) to 1 (position A), right bumper is 1 to 0
         if(gamepad2.left_bumper){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
+            mecanumDrive.box.setPosition(0.9);
             mecanumDrive.lift.setTargetPosition(500);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
-            mecanumDrive.box.setPosition(0.9);
-            justWait(500);
+            if (mecanumDrive.lift.getCurrentPosition() >= 400){
+                mecanumDrive.box.setPosition(0.66);
+                //prevents crash
+            }
+            //justWait(500);  This cause all controls to be frozen during the wait.
             mecanumDrive.box.setPosition(0.66);
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
@@ -137,11 +141,13 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(.97);
+
             //wait for some milliseconds
-            justWait(1050);//1000,750,825,900,950,
+            justWait(500);// this makes it surge.  -
             mecanumDrive.lift.setTargetPosition(35);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             mecanumDrive.lift.setPower(0.8);
+
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //this should go to 500 when position is already up (more than 400, possibly 800,1200 or 1600)
