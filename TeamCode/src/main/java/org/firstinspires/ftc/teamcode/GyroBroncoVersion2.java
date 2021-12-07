@@ -78,7 +78,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
  */
 
 @Autonomous(name="Broncobot Auto Drive By Gyro", group="16671")
-@Disabled
+//@Disabled
 public class GyroBroncoVersion2 extends LinearOpMode {
 
     private DcMotor front_left_motor;
