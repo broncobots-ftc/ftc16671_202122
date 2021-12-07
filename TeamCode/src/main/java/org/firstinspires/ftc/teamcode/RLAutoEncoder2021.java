@@ -69,7 +69,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name="BroncoForwardReverse", group="16671")
 //@Disabled
-public class GyroBroncoForwardReverse extends LinearOpMode {
+public class RLAutoEncoder2021 extends LinearOpMode {
 
     /* Declare OpMode members. */
 
@@ -109,15 +109,11 @@ public class GyroBroncoForwardReverse extends LinearOpMode {
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        //MecanumDrive.init(hardwareMap);
+
         front_left_motor = hardwareMap.get(DcMotor.class, "front_left_motor");
         back_left_motor = hardwareMap.get(DcMotor.class, "back_left_motor");
         front_right_motor = hardwareMap.get(DcMotor.class, "front_right_motor");
         back_right_motor = hardwareMap.get(DcMotor.class, "back_right_motor");
-
-
-//        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Reveser direction of left motor
         front_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -143,9 +139,6 @@ public class GyroBroncoForwardReverse extends LinearOpMode {
         back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
-//        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0, FL, FR",  "Starting at %7d :%7d",
                           front_left_motor.getCurrentPosition(),
@@ -159,7 +152,7 @@ public class GyroBroncoForwardReverse extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         encoderDrive(DRIVE_SPEED, -39, -39, 8.0);  // S3: Reverse 39 Inches with 4 Sec timeout
         encoderDrive(TURN_SPEED,   20.5, -20.5, 8.0);  // 90 degree turn left when reversing
-        encoderDrive(DRIVE_SPEED, -8, -8, 3.0);  // 8 in move backward
+        encoderDrive(DRIVE_SPEED, -7, -7, 3.0);  // 8 in move backward
 //        encoderDrive(DRIVE_SPEED,  24,  24, 5.0);  // S1: Forward 24 Inches with 5 Sec timeout
 //        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
 //        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout

@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
      };
      */
 
-//LABELS
+    //LABELS
     private static final String LABEL_DUCK = "Duck";
      private static final String LABEL_MARKER = "Marker";
      private static final String LABEL_CAPSTONE = "capstone";
@@ -76,7 +76,22 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    private double maxSpeed = 1.0;
+//     static final double     COUNTS_PER_MOTOR_REV    = ((((1+(46/17))) * (1+(46/11))) * 28);    // eg:
+//     static final double     DRIVE_GEAR_REDUCTION    = 1.18 ;     // This is < 1.0 if geared UP
+//     static final double     WHEEL_DIAMETER_INCHES   = (96/25.4) ;     // 96mm For figuring circumference
+//     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+//             (WHEEL_DIAMETER_INCHES * 3.1415);
+
+     static final double     _COUNTS_PER_MOTOR_REV    = ((((1+(46/17))) * (1+(46/11))) * 28);    // eg:
+     static final double     _DRIVE_GEAR_REDUCTION    = 1.25 ;     // This is < 1.0 if geared UP
+     static final double     _WHEEL_DIAMETER_INCHES   = (96/25.4) ;     // 96mm For figuring circumference
+     static final double     _COUNTS_PER_INCH         = (_COUNTS_PER_MOTOR_REV * _DRIVE_GEAR_REDUCTION) /
+             (_WHEEL_DIAMETER_INCHES * 3.1415);
+     static final double     DRIVE_SPEED             = 0.4;
+     static final double     TURN_SPEED              = 0.2;
+
+
+     private double maxSpeed = 1.0;
 
     // drive motor position variables
     private int flPos; private int frPos; private int blPos; private int brPos;
@@ -1138,6 +1153,81 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
         }
         return height;
     }
+     /*
+      *  Method to perform a relative move, based on encoder counts.
+      *  Encoders are not reset as the move is based on the current position.
+      *  Move will stop if any of three conditions occur:
+      *  1) Move gets to the desired position
+      *  2) Move runs out of time
+      *  3) Driver stops the opmode running.
+      */
+     public void encoderDrive(double speed,
+                              double leftInches, double rightInches,
+                              double timeoutS) {
+         int newLeftTargetFront;
+         int newRightTargetFront;
+         int newLeftTargetBack;
+         int newRightTargetBack;
+
+         // Ensure that the opmode is still active
+
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+             // Determine new target position, and pass to motor controller
+             newLeftTargetFront = frontLeft.getCurrentPosition() + (int)(leftInches * _COUNTS_PER_INCH);
+             newRightTargetFront = frontRight.getCurrentPosition() + (int)(rightInches * _COUNTS_PER_INCH);
+             newLeftTargetBack = backLeft.getCurrentPosition() + (int)(leftInches * _COUNTS_PER_INCH);
+             newRightTargetBack = backRight.getCurrentPosition() + (int)(rightInches * _COUNTS_PER_INCH);
+             frontLeft.setTargetPosition(newLeftTargetFront);
+             frontRight.setTargetPosition(newRightTargetFront);
+             backLeft.setTargetPosition(newLeftTargetBack);
+             backRight.setTargetPosition(newRightTargetBack);
+
+             // Turn On RUN_TO_POSITION
+             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+             backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+             backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+             // reset the timeout time and start motion.
+             runtime.reset();
+             frontLeft.setPower(Math.abs(speed));
+             frontRight.setPower(Math.abs(speed));
+             backLeft.setPower(Math.abs(speed));
+             backRight.setPower(Math.abs(speed));
+
+             // keep looping while we are still active, and there is time left, and both motors are running.
+             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+             // its target position, the motion will stop.  This is "safer" in the event that the robot will
+             // always end the motion as soon as possible.
+             // However, if you require that BOTH motors have finished their moves before the robot continues
+             // onto the next step, use (isBusy() || isBusy()) in the loop test.
+//             while (opModeIsActive() &&
+//                     (runtime.seconds() < timeoutS) &&
+//                     (frontLeft.isBusy() && frontRight.isBusy())) {
+//
+//                 // Display it for the driver.
+//                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTargetFront,  newRightTargetFront);
+//                 telemetry.addData("Path2",  "Running at %7d :%7d",
+//                         front_left_motor.getCurrentPosition(),
+//                         front_right_motor.getCurrentPosition());
+//                 telemetry.update();
+//             }
+
+
+
+             // Turn off RUN_TO_POSITION
+//             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+             //  sleep(250);   // optional pause after each move
+
+     }
 
 
 
