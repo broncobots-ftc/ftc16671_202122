@@ -32,7 +32,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     Servo box;//box to hold cubes and balls
 
      private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
-     //private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDS.tflite";
+     //static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDS.tflite";
 
 
      private static final String[] LABELS = {
@@ -41,22 +41,23 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
              "Duck",
              "Marker"
     };
-    /*
-     private static final String[] LABELS = {
-             "ball",
-             "cube",
-             "duck",
-             "capstone"
-     };
-     */
+
+
+
+//     private static final String[] LABELS = {
+//             "ball",
+//             "cube",
+//             "duck",
+//             "capstone"
+//     };
+
 
     //LABELS
     private static final String LABEL_DUCK = "Duck";
      private static final String LABEL_MARKER = "Marker";
      private static final String LABEL_CAPSTONE = "capstone";
 
-
-
+     public long timeZero = 0l;
 
      private double fast = 1.0; // Limit motor power to this value for Andymark RUN_USING_ENCODER mode
     private double medium = 0.7; // medium speed

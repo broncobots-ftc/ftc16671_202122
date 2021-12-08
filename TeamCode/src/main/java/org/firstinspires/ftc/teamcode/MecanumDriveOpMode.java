@@ -4,7 +4,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import java.util.Date;
 
 @TeleOp(name = "Drive Via Gamepad", group = "ftc16671")
 public class MecanumDriveOpMode extends OpMode {
@@ -13,6 +16,9 @@ public class MecanumDriveOpMode extends OpMode {
     double pusherPosition, pusherMinPosition, pusherMaxPosition,  lifterPosition, grabberPosition, armPosition;
     double  MIN_POSITION = 0, MAX_POSITION = 1;
     double SERVO_OFFSET = 0.005;
+    private int Time_Zero;
+    public ElapsedTime runtime = new ElapsedTime();
+
     // Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
@@ -82,7 +88,7 @@ public class MecanumDriveOpMode extends OpMode {
         if (gamepad1.right_trigger > 0){
             //mecanumDrive.intake.setTargetPosition(-4000000);
             mecanumDrive.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            mecanumDrive.runIntake(gamepad1.right_trigger);//take it in
+            mecanumDrive.runIntake(gamepad1.right_trigger *.6);//take it in
             telemetry.addData("intake", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //turn intake power off when gamepad1 b is pressed or right and left trigger both are pressed together
@@ -131,25 +137,31 @@ public class MecanumDriveOpMode extends OpMode {
             if (mecanumDrive.lift.getCurrentPosition() >= 400){
                 mecanumDrive.box.setPosition(0.66);
                 //prevents crash
+
             }
-            //justWait(500);  This cause all controls to be frozen during the wait.
             mecanumDrive.box.setPosition(0.66);
+            //justWait(500);  This cause all controls to be frozen during the wait.
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //left bumper is 0 to 1, right bumper is 1 to 0//jsut to commit
-        if(gamepad2.right_bumper){
+        if(gamepad2.right_trigger > 0){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(.97);
+            //mecanumDrive.timeZero = new Date().getTime();
 
             //wait for some milliseconds
-            justWait(500);// this makes it surge.  -
-            mecanumDrive.lift.setTargetPosition(35);
-            mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(0.8);
-
+            justWait(500);// this makes it surge.
+            //if(runtime.time() > 500){
+            //    runtime.reset();
+                mecanumDrive.lift.setTargetPosition(35);
+                mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                mecanumDrive.lift.setPower(0.8);
+            //}
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
+        //if(gamepad2.right_bumper
+
         //this should go to 500 when position is already up (more than 400, possibly 800,1200 or 1600)
         if(gamepad2.a) {
             if (mecanumDrive.lift.getCurrentPosition() >= 400) {
