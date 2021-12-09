@@ -149,7 +149,7 @@ public class Autonomus2021_RL extends LinearOpMode {
                     mecanumDrive.box.setPosition(.66);
                     //commit does not work
                     //move backwards until next to alliance hub
-                    mecanumDrive.moveBackward(39, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4
+                    mecanumDrive.moveBackward(5.3, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4
                     //Add wait here
                     mecanumDrive.runIntake(1);
                     //Strafe Right
