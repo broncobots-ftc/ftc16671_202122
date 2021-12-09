@@ -68,7 +68,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 @Autonomous(name="BroncoForwardReverse", group="16671")
-//@Disabled
+@Disabled
 public class RLAutoEncoder2021 extends LinearOpMode {
 
     /* Declare OpMode members. */

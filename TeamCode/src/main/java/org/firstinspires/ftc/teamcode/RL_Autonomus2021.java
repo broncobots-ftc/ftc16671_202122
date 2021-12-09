@@ -48,7 +48,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "RL_encoder_Auto", group = "ftc16671")
+@Autonomous(name = "Don't use RL_encoder_Auto", group = "ftc16671")
 
 public class RL_Autonomus2021 extends LinearOpMode {
     /** This is for encoder **/
