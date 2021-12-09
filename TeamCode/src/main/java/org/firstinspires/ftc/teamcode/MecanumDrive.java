@@ -1106,9 +1106,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     public int detectDuckLevel(float leftSide, String duckLabel){
         int level = 1;
         if(LABEL_DUCK.equals(duckLabel)) {
-            if (leftSide > 90 && leftSide < 250) {
+            if (leftSide > 5 && leftSide < 340) {
                 level = 2;
-            } else if (leftSide > 300) {
+            } else if (leftSide > 340) {
                 level = 3;
             } else {
                 level = 1;
@@ -1126,9 +1126,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
      public int detectElementLevel(float leftSide, String elementLabel){
          int level = 1;
          if(LABEL_CAPSTONE.equals(elementLabel)) {
-             if (leftSide > 90 && leftSide < 250) {
+             if (leftSide > 5 && leftSide < 340) {
                  level = 2;
-             } else if (leftSide > 300) {
+             } else if (leftSide > 340) {
                  level = 3;
              } else {
                  level = 1;

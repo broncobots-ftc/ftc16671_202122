@@ -186,7 +186,7 @@ public class Autonomus2021_BL extends LinearOpMode {
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
                     sleep(1200);
-                    mecanumDrive.moveLiftUp(0,0.4);
+                    mecanumDrive.moveLiftUp(0,0.7);
                     break;
                 }
             }

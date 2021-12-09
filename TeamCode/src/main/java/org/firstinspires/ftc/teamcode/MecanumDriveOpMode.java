@@ -127,7 +127,7 @@ public class MecanumDriveOpMode extends OpMode {
 
 
         //left bumper is 0 (floor) to 1 (position A), right bumper is 1 to 0
-        if(gamepad2.left_bumper){
+        if(gamepad2.left_bumper && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(0.9);
@@ -139,19 +139,20 @@ public class MecanumDriveOpMode extends OpMode {
                 //prevents crash
 
             }
+            justWait(500); // This cause all controls to be frozen during the wait.
             mecanumDrive.box.setPosition(0.66);
             //justWait(500);  This cause all controls to be frozen during the wait.
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //left bumper is 0 to 1, right bumper is 1 to 0//jsut to commit
-        if(gamepad2.right_trigger > 0){
+        if(gamepad2.right_bumper && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(.97);
             //mecanumDrive.timeZero = new Date().getTime();
 
             //wait for some milliseconds
-            justWait(500);// this makes it surge.
+            justWait(1100);// this makes it surge.
             //if(runtime.time() > 500){
             //    runtime.reset();
                 mecanumDrive.lift.setTargetPosition(35);
@@ -217,7 +218,7 @@ public class MecanumDriveOpMode extends OpMode {
 
         //Dump function - press doad-down to dump and return
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
-            if (gamepad2.dpad_down) {
+            if (gamepad2.dpad_down && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1) {
                 mecanumDrive.box.setPosition(0);
                 //wait here for some milliseconds
                 justWait(1500);
@@ -267,7 +268,7 @@ public class MecanumDriveOpMode extends OpMode {
            justWait(1000);
            mecanumDrive.lift.setTargetPosition(currPos - 100);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            mecanumDrive.lift.setPower(0.1);//it was 0.2
+            mecanumDrive.lift.setPower(0.5);//it was 0.2, then 0.1
             //mecanumDrive.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             //mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
