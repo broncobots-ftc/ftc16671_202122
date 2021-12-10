@@ -127,7 +127,7 @@ public class MecanumDriveOpMode extends OpMode {
 
 
         //left bumper is 0 (floor) to 1 (position A), right bumper is 1 to 0
-        if(gamepad2.left_bumper && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1){
+        if(gamepad2.left_bumper && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1 && gamepad1.left_stick_y > -0.1 && gamepad1.left_stick_x > -0.1 && gamepad1.right_stick_x > -0.1){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(0.9);
@@ -145,7 +145,7 @@ public class MecanumDriveOpMode extends OpMode {
             telemetry.addData("left-after lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //left bumper is 0 to 1, right bumper is 1 to 0//jsut to commit
-        if(gamepad2.right_bumper && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1){
+        if(gamepad2.right_bumper && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1  && gamepad1.left_stick_y > -0.1 && gamepad1.left_stick_x > -0.1 && gamepad1.right_stick_x > -0.1){
             telemetry.addData("left-before lift", "position=" +  mecanumDrive.intake.getCurrentPosition());
             mecanumDrive.holder.setPosition(.73);
             mecanumDrive.box.setPosition(.97);
@@ -218,7 +218,7 @@ public class MecanumDriveOpMode extends OpMode {
 
         //Dump function - press doad-down to dump and return
         if (mecanumDrive.lift.getCurrentPosition() >= 450) {
-            if (gamepad2.dpad_down && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1) {
+            if (gamepad2.dpad_down && gamepad1.left_stick_y < 0.1 && gamepad1.left_stick_x < 0.1 && gamepad1.right_stick_x <0.1 && gamepad1.left_stick_y > -0.1 && gamepad1.left_stick_x > -0.1 && gamepad1.right_stick_x > -0.1) {
                 mecanumDrive.box.setPosition(0);
                 //wait here for some milliseconds
                 justWait(1500);
@@ -264,7 +264,7 @@ public class MecanumDriveOpMode extends OpMode {
         telemetry.update();
         if(gamepad1.y){
            int currPos =  mecanumDrive.lift.getCurrentPosition();
-           mecanumDrive.box.setPosition(1);
+           mecanumDrive.box.setPosition(.97);
            justWait(1000);
            mecanumDrive.lift.setTargetPosition(currPos - 100);
             mecanumDrive.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
