@@ -30,14 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
@@ -52,10 +48,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Disabled
-@Autonomous (name = "RL Autonomus", group = "ftc16671")
+@Autonomous(name = "BR Autonomus Side", group = "ftc16671")
 
-public class Autonomus2021_RL extends LinearOpMode {
+public class Autonomus2021_BR_side extends LinearOpMode {
     /** This is for encoder **/
     static final double     COUNTS_PER_MOTOR_REV    = 500 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP
@@ -140,6 +135,8 @@ public class Autonomus2021_RL extends LinearOpMode {
 
                         }
                     }
+                    ////sleep(5000);//before it was 8000
+
                     // For RED1, with front against wall
                     // Identify location of shipping element/ducky
                     mecanumDrive.holder.setPosition(.73);
@@ -150,15 +147,16 @@ public class Autonomus2021_RL extends LinearOpMode {
                     sleep(500);
                     mecanumDrive.box.setPosition(.66);
                     //commit does not work
-                    //move backwards until next to alliance hub
-                    mecanumDrive.moveBackward(5.3, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4
-                    //Add wait here
-                    mecanumDrive.runIntake(1);
+                    mecanumDrive.runIntake(-1);
+                    //running intake backwards to kick away element
+                    mecanumDrive.moveBackward(17, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4,5.3, 14
                     //Strafe Right
-                    mecanumDrive.rotateRightSide(7.4,true,5,0.4, telemetry);
-                    //mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
+                   //mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
+                    mecanumDrive.rotateLeftSide(9, true,5,0.4, telemetry);//-7.4, -8.1, -8.4
                     //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.moveBackward(8, true, 5, 0.2, telemetry);//2.5, 3.1, 3
+                    mecanumDrive.runIntake(0);
+                    //stop intake
+                    mecanumDrive.moveBackward(3.6, true, 5, 0.2, telemetry);//2.5, 3.1, 3
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
                     //Move lifter as
                     // recognized by Vuforia and based on location of duck
@@ -166,24 +164,26 @@ public class Autonomus2021_RL extends LinearOpMode {
                     sleep(1500);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
-                    // Move forwaard slightly
-                    mecanumDrive.moveForward(28, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6
-                    //move lift down
+                    mecanumDrive.rotateLeftSide(-1.0, true, 5, 0.4, telemetry );
                     mecanumDrive.moveLiftUp(500, 0.4);
+                    // Move forwaard slightly
+                    mecanumDrive.moveForward(12, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6, 12.4
+                    //move lift down
                     //turn left 90 degrees
-                    mecanumDrive.rotateRightSide(14.8, true, 5, 0.4, telemetry);//3, 7.5, 7.3
+                    mecanumDrive.rotateLeftSide(6.6, true, 5, 0.4, telemetry);//3, 7.5, 7.3, 14.8, 15.5, 15, 14, 14.3, 14.9
                     //Go foward and park in the warehouse
-                    mecanumDrive.strafeRight(31, true, 5, 0.4, telemetry);//12, 18, 7.2, 15
-                    mecanumDrive.runCarousel(-0.4);
-                    //mecanumDrive.strafeLeft(21, true, 5, 0.1, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
+                    mecanumDrive.moveBackward(21, true, 5, 0.4, telemetry);//12, 18, 7.2, 15, 16, 18, 20
+                    mecanumDrive.runCarousel(0.4);
+                    mecanumDrive.moveBackward(1, true, 5, 0.2, telemetry );
+                   ////mecanumDrive.moveForward(2.0, true, 5, 0.1, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                     // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
                     sleep(5000);
-                    mecanumDrive.strafeLeft(21, true, 5, 0.4, telemetry);
-                    mecanumDrive.moveBackward(3, true, 5, 0.4, telemetry);
+                    mecanumDrive.moveForward(8.5, true, 5, 0.4, telemetry);//10
+                    mecanumDrive.strafeRight(3, true, 5, 0.4, telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(1);
                     sleep(1200);
-                    mecanumDrive.moveLiftUp(0, 0.7);
+                    mecanumDrive.moveLiftUp(0, 0.7); //was 0.4
                     break;
 
                     //}

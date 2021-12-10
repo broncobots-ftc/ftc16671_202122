@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -48,7 +49,8 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "RL Autonomus Delay", group = "ftc16671")
+@Disabled
+      @Autonomous  (name = "RL Autonomus Delay", group = "ftc16671")
 
 public class Autonomus2021_RL_Delay extends LinearOpMode {
     /** This is for encoder **/
