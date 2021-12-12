@@ -149,14 +149,14 @@ public class Autonomus2021_RL_side extends LinearOpMode {
                     //commit does not work
                     mecanumDrive.runIntake(-1);
                     //running intake backwards to kick away element
-                    mecanumDrive.moveBackward(17, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4,5.3, 14
+                    mecanumDrive.moveBackward(17.5, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4,5.3, 14
                     //Strafe Right
                    //mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
                     mecanumDrive.rotateLeftSide(-9, true,5,0.4, telemetry);//-7.4, -8.1, -8.4
                     //Move backward (make sure to contact the shipping hub)
                     mecanumDrive.runIntake(0);
                     //stop intake
-                    mecanumDrive.moveBackward(3, true, 5, 0.2, telemetry);//2.5, 3.1, 3
+                    mecanumDrive.moveBackward(3.2, true, 5, 0.2, telemetry);//2.5, 3.1, 3
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
                     //Move lifter as
                     // recognized by Vuforia and based on location of duck
@@ -164,15 +164,16 @@ public class Autonomus2021_RL_side extends LinearOpMode {
                     sleep(1500);
                     //wait for two seconds
                     mecanumDrive.dumpAndBringbackBox();
+                    mecanumDrive.moveForward(2, true, 5, .4, telemetry);
                     mecanumDrive.rotateLeftSide(1.0, true, 5, 0.4, telemetry );
                     // Move forwaard slightly
-                    mecanumDrive.moveForward(12, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6, 12.4
+                    mecanumDrive.moveForward(10, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6, 12.4
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.4);
                     //turn left 90 degrees
                     mecanumDrive.rotateLeftSide(15.2, true, 5, 0.4, telemetry);//3, 7.5, 7.3, 14.8, 15.5, 15, 14, 14.3, 14.9
                     //Go foward and park in the warehouse
-                    mecanumDrive.strafeRight(19, true, 5, 0.4, telemetry);//12, 18, 7.2, 15, 16, 18, 20
+                    mecanumDrive.strafeRight(20, true, 5, 0.4, telemetry);//12, 18, 7.2, 15, 16, 18, 20,19
                     mecanumDrive.runCarousel(-0.4);
                    ////mecanumDrive.moveForward(2.0, true, 5, 0.1, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
                     // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);

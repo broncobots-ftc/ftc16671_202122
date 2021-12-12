@@ -111,13 +111,13 @@ public class MecanumDriveOpMode extends OpMode {
         //carousel spins when b is activated
         if (gamepad1.b){
             //mecanumDrive.intake.setTargetPosition(4000000);
-            mecanumDrive.carousel.setPower(-0.5);
+            mecanumDrive.carousel.setPower(-0.65);//-.5,-.7
             telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
         //carousel spins other way when x is activated
         if (gamepad1.x){
             //mecanumDrive.intake.setTargetPosition(-4000000);
-            mecanumDrive.carousel.setPower(0.5);
+            mecanumDrive.carousel.setPower(0.65);//.5
             telemetry.addData("carousel", "position=" +  mecanumDrive.intake.getCurrentPosition());
         }
 
