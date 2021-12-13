@@ -30,16 +30,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+//import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -173,7 +173,7 @@ public class GyroBroncoVersion2 extends LinearOpMode {
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
-            telemetry.addData(">", "Robot Heading = %d", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES));
+            telemetry.addData(">", "Robot Heading = %d", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
             telemetry.update();
         }
 
@@ -183,8 +183,8 @@ public class GyroBroncoVersion2 extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
-        gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 48 inches
-//        gyroTurn( TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
+        gyroDrive(DRIVE_SPEED, 24.0, 0.0);    // Drive FWD 48 inches
+        gyroTurn( TURN_SPEED, -45.0);         // Turn  CW to 45 Degrees
 //        gyroHold( TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
 //        gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
 //        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
@@ -436,7 +436,7 @@ public class GyroBroncoVersion2 extends LinearOpMode {
 
         // calculate error in -179 to +180 range  (
         //robotError = targetAngle - imu.getAngularOrientation().getIntegratedZValue();
-        robotError = targetAngle-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        robotError = targetAngle-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
         while (robotError > 180)  robotError -= 360;
         while (robotError <= -180) robotError += 360;
         return robotError;
