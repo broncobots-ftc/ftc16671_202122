@@ -1,95 +1,26 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-//import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-//import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-/**
- * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
- * It uses the common Pushbot hardware class to define the drive on the robot.
- * The code is structured as a LinearOpMode
- *
- * The code REQUIRES that you DO have encoders on the wheels,
- *   otherwise you would use: PushbotAutoDriveByTime;
- *
- *  This code ALSO requires that you have a Modern Robotics I2C gyro with the name "gyro"
- *   otherwise you would use: PushbotAutoDriveByEncoder;
- *
- *  This code requires that the drive Motors have been configured such that a positive
- *  power command moves them forward, and causes the encoders to count UP.
- *
- *  This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
- *
- *  In order to calibrate the Gyro correctly, the robot must remain stationary during calibration.
- *  This is performed when the INIT button is pressed on the Driver Station.
- *  This code assumes that the robot is stationary when the INIT button is pressed.
- *  If this is not the case, then the INIT should be performed again.
- *
- *  Note: in this example, all angles are referenced to the initial coordinate frame set during the
- *  the Gyro Calibration process, or whenever the program issues a resetZAxisIntegrator() call on the Gyro.
- *
- *  The angle of movement/rotation is assumed to be a standardized rotation around the robot Z axis,
- *  which means that a Positive rotation is Counter Clock Wise, looking down on the field.
- *  This is consistent with the FTC field coordinate conventions set out in the document:
- *  ftc_app\doc\tutorial\FTC_FieldCoordinateSystemDefinition.pdf
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
-@Autonomous(name="GyroBroncoVersion2", group="16671")
-//@Disabled
-public class GyroBroncoVersion2 extends LinearOpMode {
+@Autonomous(name = "GyroBroncoVersion4")
+public class GyroBroncoVersion4 extends LinearOpMode {
 
     private DcMotor front_left_motor;
-    private DcMotor back_left_motor;
     private DcMotor front_right_motor;
+    private DcMotor back_left_motor;
     private DcMotor back_right_motor;
     private BNO055IMU imu;
-
-    /* Declare OpMode members. */
-//    HardwarePushbot robot   = new HardwarePushbot();   // Use a Pushbot's hardware
-//    ModernRoboticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
     static final double     COUNTS_PER_MOTOR_REV    = ((((1+(46/17))) * (1+(46/11))) * 28);    // eg:
     static final double     DRIVE_GEAR_REDUCTION    = 1.25 ;     // This is < 1.0 if geared UP
@@ -99,64 +30,49 @@ public class GyroBroncoVersion2 extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.3;
 
-
-//    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-//    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-//    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-//    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-//                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
-//
-//    // These constants define the desired driving/control characteristics
-//    // The can/should be tweaked to suite the specific robot drive train.
-//    static final double     DRIVE_SPEED             = 0.7;     // Nominal speed for better accuracy.
-//    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
-
-    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
+    static final double     HEADING_THRESHOLD       = 5 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.05;     // Larger is more responsive, but also less stable
 
 
+    /**
+     * This function is executed when this Op Mode is selected from the Driver Station.
+     */
     @Override
     public void runOpMode() {
+        BNO055IMU.Parameters IMU_Parameters;
+        ElapsedTime ElapsedTime2;
+        double Left_Power;
+        double Right_Power;
+        float Yaw_Angle = 0 ;
 
-        /*
-         * Initialize the standard drive system variables.
-         * The init() method of the hardware class does most of the work here
-         */
-        //robot.init(hardwareMap);
         front_left_motor = hardwareMap.get(DcMotor.class, "front_left_motor");
-        back_left_motor = hardwareMap.get(DcMotor.class, "back_left_motor");
         front_right_motor = hardwareMap.get(DcMotor.class, "front_right_motor");
+        back_left_motor = hardwareMap.get(DcMotor.class, "back_left_motor");
         back_right_motor = hardwareMap.get(DcMotor.class, "back_right_motor");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters IMU_Parameters;
 
-        // Reveser direction of left motor
-        front_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        back_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Place into braking mode so robot stops abruptly
+
         front_left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         front_right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Reverse direction of one motor so robot moves
+        // forward rather than spinning in place.
+        front_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        back_left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
-
-        //gyro = hardwareMap.get(BNO055IMU.class, "imu");
-        //gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
-
-        // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        front_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        front_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-//        // Send telemetry message to alert driver that we are calibrating;
-//        telemetry.addData(">", "Calibrating Gyro");    //
-//        telemetry.update();
+//        // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
+//        front_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        front_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        back_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        back_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //
-//        //gyro.calibrate();
-//        init_IMU();
+//        front_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        front_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        back_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         // Create an IMU parameters object.
         IMU_Parameters = new BNO055IMU.Parameters();
@@ -180,47 +96,89 @@ public class GyroBroncoVersion2 extends LinearOpMode {
         telemetry.addData("Action needed:", "Please press the start triangle");
         telemetry.update();
         // Wait for Start to be pressed on Driver Station.
-        //waitForStart();
+        waitForStart();
+        // Create a timer object with millisecond
+        // resolution and save in ElapsedTime variable.
+        ElapsedTime2 = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        // Initialize motor power variables to 30%.
+        Left_Power = 0.3;
+        Right_Power = 0.3;
+        // Set motor powers to the variable values.
+        front_left_motor.setPower(Left_Power);
+        front_right_motor.setPower(Right_Power);
+        back_left_motor.setPower(Left_Power);
+        back_right_motor.setPower(Right_Power);
 
+        gyroDrive(DRIVE_SPEED, -29.0, 0.0);    // Drive back 24 inches
+        sleep(250);
+        gyroTurn( TURN_SPEED, -90.0);         // Turn  CW to 90 Degrees
 
-        // make sure the gyro is calibrated before continuing
-        while (!isStopRequested() && imu.isGyroCalibrated())  {
-            sleep(50);
-            idle();
+        gyroDrive(DRIVE_SPEED, -6.5, -90);    // Drive back 24 inches
+
+/*
+//
+//         Move robot forward for 2 seconds or until stop
+//         is pressed on Driver Station.
+
+        while (!(ElapsedTime2.milliseconds() >= 2000 || isStopRequested())) {
+            // Save gyro's yaw angle
+            Yaw_Angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            // Report yaw orientation to Driver Station.
+            telemetry.addData("Yaw angle", Yaw_Angle);
+            // If the robot is moving straight ahead the
+            // yaw value will be close to zero. If it's not, we
+            // need to adjust the motor powers to adjust heading.
+            // If robot yaws right or left by 5 or more,
+            // adjust motor power variables to compensation.
+            if (Yaw_Angle < -5) {
+                // Turn left
+                Left_Power = 0.25;
+                Right_Power = 0.35;
+            } else if (Yaw_Angle > 5) {
+                // Turn right.
+                Left_Power = 0.35;
+                Right_Power = 0.25;
+            } else {
+                // Continue straight
+                Left_Power = 0.3;
+                Right_Power = 0.3;
+            }
+            // Report the new power levels to the Driver Station.
+            telemetry.addData("Left Motor Power", Left_Power);
+            telemetry.addData("Right Motor Power", Right_Power);
+            // Update the motors to the new power levels.
+            front_left_motor.setPower(Left_Power);
+            front_right_motor.setPower(Right_Power);
+            back_left_motor.setPower(Left_Power);
+            back_right_motor.setPower(Right_Power);
+            telemetry.update();
+            // Wait 1/5 second before checking again.
+            sleep(200);
         }
-
-        telemetry.addData(">", "Robot Ready.");    //
-        telemetry.update();
-
-        front_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        front_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        back_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-        while (!isStarted()) {
-            telemetry.addData(">", "Robot Heading = %d", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
+        // Now let's execute a right turn using power
+        // levels that will cause a turn in place.
+        front_left_motor.setPower(0.2);
+        front_right_motor.setPower(-0.2);
+        back_left_motor.setPower(0.2);
+        back_right_motor.setPower(-0.2);
+        // Continue until robot yaws right by 90 degrees
+        // or stop is pressed on Driver Station.
+        while (!(Yaw_Angle <= -90 || isStopRequested())) {
+            // Update Yaw-Angle variable with current yaw.
+            Yaw_Angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            // Report yaw orientation to Driver Station.
+            telemetry.addData("Yaw value", Yaw_Angle);
             telemetry.update();
         }
+        // We're done. Turn off motors
+        front_left_motor.setPower(0);
+        front_right_motor.setPower(0);
+        back_left_motor.setPower(0);
+        back_right_motor.setPower(0);
+        // Pause so final telemetry is displayed.
+        sleep(1000);
 
-
-        //gyro.resetZAxisIntegrator();
-
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        // Put a hold after each turn
-        gyroDrive(DRIVE_SPEED, 24.0, 0.0);    // Drive FWD 48 inches
-        gyroTurn( TURN_SPEED, -45.0);         // Turn  CW to 45 Degrees
-//        gyroHold( TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
-//        gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
-//        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
-//        gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-//        gyroTurn( TURN_SPEED,   0.0);         // Turn  CW  to   0 Degrees
-//        gyroHold( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-//        gyroDrive(DRIVE_SPEED,-48.0, 0.0);    // Drive REV 48 inches
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
+ */
     }
 
     /**
@@ -234,44 +192,18 @@ public class GyroBroncoVersion2 extends LinearOpMode {
         return imu.isGyroCalibrated();
     }
 
-//    //private void init_IMU() {
-//        BNO055IMU.Parameters IMUparameters;
-//        //BNO055IMU.Parameters IMU_Parameters;
-////        IMU_Parameters = new BNO055IMU.Parameters();
-////        IMU_Parameters.mode = BNO055IMU.SensorMode.IMU;
-////        imu.initialize(IMU_Parameters);
-//
-//        // Create a new IMU parameter object
-//        IMUparameters = new BNO055IMU.Parameters();
-//        // Set the imu mode to imu so automatically calibrate itself
-//        IMUparameters.mode = BNO055IMU.SensorMode.IMU;
-//        // Use degrees as angle unit
-//        IMUparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-//        // use meters per seconds^2 for units of acceleration
-//        IMUparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-//        // Warn driver it may take several seconds
-//        telemetry.addData("Status", "Init IMU... Please Wait");
-//        telemetry.update();
-//        // Initialize IMU using these parameters
-//        imu.initialize(IMUparameters);
-//        // Tell Drive the init is done
-//        telemetry.addData("Status", "IMU initialized");
-//        telemetry.update();
-//    }
-
-
-   /**
-    *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-    *  Move will stop if either of these conditions occur:
-    *  1) Move gets to the desired position
-    *  2) Driver stops the opmode running.
-    *
-    * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-    * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
-    * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-    *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-    *                   If a relative angle is required, add/subtract from current heading.
-    */
+    /**
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
     public void gyroDrive ( double speed,
                             double distance,
                             double angle) {
@@ -292,6 +224,7 @@ public class GyroBroncoVersion2 extends LinearOpMode {
             moveCounts = (int)(distance * COUNTS_PER_INCH);
             newLeftTarget = front_left_motor.getCurrentPosition() + moveCounts;
             newRightTarget = front_right_motor.getCurrentPosition() + moveCounts;
+
 
 
             // Set Target and Turn On RUN_TO_POSITION
@@ -315,7 +248,7 @@ public class GyroBroncoVersion2 extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (front_left_motor.isBusy() && front_right_motor.isBusy())) {
+                    (front_left_motor.isBusy() && front_right_motor.isBusy())) {
 
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -347,7 +280,7 @@ public class GyroBroncoVersion2 extends LinearOpMode {
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
                 telemetry.addData("Actual",  "%7d:%7d",      front_left_motor.getCurrentPosition(),
-                                                             front_right_motor.getCurrentPosition());
+                        front_right_motor.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
                 telemetry.update();
             }
@@ -370,17 +303,20 @@ public class GyroBroncoVersion2 extends LinearOpMode {
         }
     }
 
+
+
+
     /**
-     *  Method to spin on central axis to point in a new direction.
-     *  Move will stop if either of these conditions occur:
-     *  1) Move gets to the heading (angle)
-     *  2) Driver stops the opmode running.
-     *
-     * @param speed Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
-     */
+                             *  Method to spin on central axis to point in a new direction.
+                             *  Move will stop if either of these conditions occur:
+                             *  1) Move gets to the heading (angle)
+                             *  2) Driver stops the opmode running.
+                             *
+                             * @param speed Desired speed of turn.
+                             * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+                             *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+                             *                   If a relative angle is required, add/subtract from current heading.
+                             */
     public void gyroTurn (  double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
@@ -465,6 +401,7 @@ public class GyroBroncoVersion2 extends LinearOpMode {
         return onTarget;
     }
 
+
     /**
      * getError determines the error between the target angle and the robot's current heading
      * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
@@ -494,3 +431,4 @@ public class GyroBroncoVersion2 extends LinearOpMode {
     }
 
 }
+
