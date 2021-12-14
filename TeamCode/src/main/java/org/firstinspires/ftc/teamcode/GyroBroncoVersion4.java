@@ -109,11 +109,16 @@ public class GyroBroncoVersion4 extends LinearOpMode {
         back_left_motor.setPower(Left_Power);
         back_right_motor.setPower(Right_Power);
 
-        gyroDrive(DRIVE_SPEED, -29.0, 0.0);    // Drive back 24 inches
+        gyroDrive(DRIVE_SPEED, -58.0, 0.0);    // Drive back 24 inches
         sleep(250);
-        gyroTurn( TURN_SPEED, -90.0);         // Turn  CW to 90 Degrees
+        gyroTurn( TURN_SPEED, -130.0);         // Turn  CW to 90 Degrees
 
-        gyroDrive(DRIVE_SPEED, -6.5, -90);    // Drive back 24 inches
+        gyroDrive(DRIVE_SPEED, -12, -130);    // Drive back 24 inches
+        sleep(1000);
+        gyroDrive(DRIVE_SPEED, 3, -130);
+        gyroTurn( TURN_SPEED, -220.0);
+        gyroDrive(DRIVE_SPEED, -50, -220);
+        gyroTurn( TURN_SPEED, -270.0);
 
 /*
 //

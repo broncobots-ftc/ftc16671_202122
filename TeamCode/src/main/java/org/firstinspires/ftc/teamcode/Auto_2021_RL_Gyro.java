@@ -48,7 +48,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "RL Autonomus Side", group = "ftc16671")
+@Autonomous(name = "Auto_2021_RL_Gyro", group = "ftc16671")
 
 public class Auto_2021_RL_Gyro extends LinearOpMode {
     /** This is for encoder **/
