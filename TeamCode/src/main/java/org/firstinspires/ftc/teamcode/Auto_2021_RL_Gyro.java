@@ -81,6 +81,7 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
         mecanumDrive.initCarousel_and_lift(hardwareMap);
         mecanumDrive.initServo(hardwareMap);
         mecanumDrive.initIntake(hardwareMap);
+        mecanumDrive.init_IMU(hardwareMap, telemetry);
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
@@ -149,42 +150,45 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
                     //commit does not work
                     mecanumDrive.runIntake(-1);
                     //running intake backwards to kick away element
-                    mecanumDrive.moveBackward(17.5, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4,5.3, 14
+                    //mecanumDrive.moveBackward(17.5, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4,5.3, 14
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -58.0, 0.0, opModeIsActive(), telemetry);    // Drive back 24 inches
+
                     //Strafe Right
                    //mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
-                    mecanumDrive.rotateLeftSide(-9, true,5,0.4, telemetry);//-7.4, -8.1, -8.4
-                    //Move backward (make sure to contact the shipping hub)
-                    mecanumDrive.runIntake(0);
-                    //stop intake
-                    mecanumDrive.moveBackward(3.2, true, 5, 0.2, telemetry);//2.5, 3.1, 3
-                    mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
-                    //Move lifter as
-                    // recognized by Vuforia and based on location of duck
-                    //Use dropping function
-                    sleep(1500);
-                    //wait for two seconds
-                    mecanumDrive.dumpAndBringbackBox();
-                    mecanumDrive.moveForward(2, true, 5, .4, telemetry);
-                    mecanumDrive.rotateLeftSide(1.0, true, 5, 0.4, telemetry );
-                    // Move forwaard slightly
-                    mecanumDrive.moveForward(10, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6, 12.4
-                    //move lift down
-                    mecanumDrive.moveLiftUp(500, 0.4);
-                    //turn left 90 degrees
-                    mecanumDrive.rotateLeftSide(15.2, true, 5, 0.4, telemetry);//3, 7.5, 7.3, 14.8, 15.5, 15, 14, 14.3, 14.9
-                    //Go foward and park in the warehouse
-                    mecanumDrive.strafeRight(20, true, 5, 0.4, telemetry);//12, 18, 7.2, 15, 16, 18, 20,19
-                    mecanumDrive.runCarousel(-0.4);
-                   ////mecanumDrive.moveForward(2.0, true, 5, 0.1, telemetry);//Two sets of moving backwards at different speeds so that the robot doesn't bounce
-                    // mecanumDrive.strafeRight(3,true,5,0.4, telemetry);
-                    sleep(5000);
-                    mecanumDrive.strafeLeft(-8, true, 5, 0.4, telemetry);//10
-                    mecanumDrive.moveBackward(3, true, 5, 0.4, telemetry);
-                    //puting box back to floor to prepare for tele op
-                    mecanumDrive.box.setPosition(1);
-                    sleep(1200);
-                    mecanumDrive.moveLiftUp(0, 0.7); //was 0.4
-                    break;
+                    sleep(250);
+                    mecanumDrive.gyroTurn( TURN_SPEED, -130.0, opModeIsActive(), telemetry);         // Turn  CW to 90 Degrees
+
+//                    mecanumDrive.rotateLeftSide(-9, true,5,0.4, telemetry);//-7.4, -8.1, -8.4
+//                    //Move backward (make sure to contact the shipping hub)
+//                    mecanumDrive.runIntake(0);
+//                    //stop intake
+//                    mecanumDrive.moveBackward(3.2, true, 5, 0.2, telemetry);//2.5, 3.1, 3
+//                    mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
+//
+//                    //Use dropping function
+//                    sleep(1500);
+//                    //wait for two seconds
+//                    mecanumDrive.dumpAndBringbackBox();
+//                    mecanumDrive.moveForward(2, true, 5, .4, telemetry);
+//                    mecanumDrive.rotateLeftSide(1.0, true, 5, 0.4, telemetry );
+//                    // Move forwaard slightly
+//                    mecanumDrive.moveForward(10, true, 5, 0.4, telemetry);//5.0, 5.6, 5.7, 5.6, 5.4, 5.2, 5.3, 5.5, 5.6, 12.4
+//                    //move lift down
+//                    mecanumDrive.moveLiftUp(500, 0.4);
+//                    //turn left 90 degrees
+//                    mecanumDrive.rotateLeftSide(15.2, true, 5, 0.4, telemetry);//3, 7.5, 7.3, 14.8, 15.5, 15, 14, 14.3, 14.9
+//                    //Go foward and park in the warehouse
+//                    mecanumDrive.strafeRight(20, true, 5, 0.4, telemetry);//12, 18, 7.2, 15, 16, 18, 20,19
+//                    mecanumDrive.runCarousel(-0.4);
+//
+//                    sleep(5000);
+//                    mecanumDrive.strafeLeft(-8, true, 5, 0.4, telemetry);//10
+//                    mecanumDrive.moveBackward(3, true, 5, 0.4, telemetry);
+//                    //puting box back to floor to prepare for tele op
+//                    mecanumDrive.box.setPosition(1);
+//                    sleep(1200);
+//                    mecanumDrive.moveLiftUp(0, 0.7); //was 0.4
+//                    break;
                     //to commit
 
                     //}
