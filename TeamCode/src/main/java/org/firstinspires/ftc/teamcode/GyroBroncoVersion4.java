@@ -27,10 +27,10 @@ public class GyroBroncoVersion4 extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = (96/25.4) ;     // 96mm For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
+    static final double     DRIVE_SPEED             = 0.4;
     static final double     TURN_SPEED              = 0.3;
 
-    static final double     HEADING_THRESHOLD       = 5 ;      // As tight as we can make it with an integer gyro
+    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.05;     // Larger is more responsive, but also less stable
 
@@ -113,12 +113,20 @@ public class GyroBroncoVersion4 extends LinearOpMode {
         sleep(250);
         gyroTurn( TURN_SPEED, -130.0);         // Turn  CW to 90 Degrees
 
-        gyroDrive(DRIVE_SPEED, -12, -130);    // Drive back 24 inches
-        sleep(1000);
-        gyroDrive(DRIVE_SPEED, 3, -130);
-        gyroTurn( TURN_SPEED, -220.0);
-        gyroDrive(DRIVE_SPEED, -50, -220);
+        gyroDrive(DRIVE_SPEED, -13, -130);    // Drive back 24 inches
+        sleep(2000);
+        //back away from hub
+        gyroDrive(DRIVE_SPEED, 4, -130);
+        //turning and driving towards to call
         gyroTurn( TURN_SPEED, -270.0);
+        gyroDrive(DRIVE_SPEED, -25, -270);
+        gyroTurn( TURN_SPEED, -180.0);
+        gyroDrive(DRIVE_SPEED, -45, -180);
+        gyroTurn( TURN_SPEED, -270.0);
+        gyroDrive(DRIVE_SPEED, -4, -270);
+        sleep(1000);
+        gyroTurn( TURN_SPEED, -360.0);
+        gyroDrive(DRIVE_SPEED, -19, -360);
 
 /*
 //
@@ -434,6 +442,8 @@ public class GyroBroncoVersion4 extends LinearOpMode {
     public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -1, 1);
     }
+
+
 
 }
 
