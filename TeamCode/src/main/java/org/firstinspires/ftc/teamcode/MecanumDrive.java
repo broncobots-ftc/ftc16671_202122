@@ -36,7 +36,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     Servo box;//box to hold cubes and balls
 
      private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
-     //static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDS.tflite";
+     //private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDS.tflite";
+     //private static final String TFOD_MODEL_ASSET = "model_unquant.tflite";
+
 
 
      private static final String[] LABELS = {
@@ -92,6 +94,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
      static final double     _WHEEL_DIAMETER_INCHES   = (96/25.4) ;     // 96mm For figuring circumference
      static final double     _COUNTS_PER_INCH         = (_COUNTS_PER_MOTOR_REV * _DRIVE_GEAR_REDUCTION) /
              (_WHEEL_DIAMETER_INCHES * 3.1415);
+
      static final double     DRIVE_SPEED             = 0.4;
      static final double     TURN_SPEED              = 0.2;
 
@@ -229,6 +232,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
     }
 
     void init(HardwareMap hwMap) {
+
         frontLeft = hwMap.get(DcMotor.class, "front_left_motor");
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight = hwMap.get(DcMotor.class, "front_right_motor");
@@ -242,6 +246,11 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //grabber = hwMap.get(Servo.class, "left_hand");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -1293,9 +1302,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
          if (opModeIsActive) {
 
              // Determine new target position, and pass to motor controller
-             moveCounts = (int)(distance * COUNTS_PER_INCH);
+             moveCounts = (int)(distance * _COUNTS_PER_INCH);
              newLeftTarget = frontLeft.getCurrentPosition() + moveCounts;
              newRightTarget = frontRight.getCurrentPosition() + moveCounts;
+
 
              // Set Target and Turn On RUN_TO_POSITION
              frontLeft.setTargetPosition(newLeftTarget);

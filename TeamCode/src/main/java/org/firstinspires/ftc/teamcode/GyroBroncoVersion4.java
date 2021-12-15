@@ -109,24 +109,26 @@ public class GyroBroncoVersion4 extends LinearOpMode {
         back_left_motor.setPower(Left_Power);
         back_right_motor.setPower(Right_Power);
 
-        gyroDrive(DRIVE_SPEED, -58.0, 0.0);    // Drive back 24 inches
-        sleep(250);
-        gyroTurn( TURN_SPEED, -130.0);         // Turn  CW to 90 Degrees
+        gyroStrafe(DRIVE_SPEED, 20.0, 0.0);
 
-        gyroDrive(DRIVE_SPEED, -13, -130);    // Drive back 24 inches
-        sleep(2000);
-        //back away from hub
-        gyroDrive(DRIVE_SPEED, 4, -130);
-        //turning and driving towards to call
-        gyroTurn( TURN_SPEED, -270.0);
-        gyroDrive(DRIVE_SPEED, -25, -270);
-        gyroTurn( TURN_SPEED, -180.0);
-        gyroDrive(DRIVE_SPEED, -45, -180);
-        gyroTurn( TURN_SPEED, -270.0);
-        gyroDrive(DRIVE_SPEED, -4, -270);
-        sleep(1000);
-        gyroTurn( TURN_SPEED, -360.0);
-        gyroDrive(DRIVE_SPEED, -19, -360);
+//        gyroDrive(DRIVE_SPEED, -58.0, 0.0);    // Drive back 24 inches
+//        sleep(250);
+//        gyroTurn( TURN_SPEED, -130.0);         // Turn  CW to 90 Degrees
+//
+//        gyroDrive(DRIVE_SPEED, -13, -130);    // Drive back 24 inches
+//        sleep(2000);
+//        //back away from hub
+//        gyroDrive(DRIVE_SPEED, 4, -130);
+//        //turning and driving towards to call
+//        gyroTurn( TURN_SPEED, -270.0);
+//        gyroDrive(DRIVE_SPEED, -25, -270);
+//        gyroTurn( TURN_SPEED, -180.0);
+//        gyroDrive(DRIVE_SPEED, -45, -180);
+//        gyroTurn( TURN_SPEED, -270.0);
+//        gyroDrive(DRIVE_SPEED, -4, -270);
+//        sleep(1000);
+//        gyroTurn( TURN_SPEED, -360.0);
+//        gyroDrive(DRIVE_SPEED, -19, -360);
 
 /*
 //
@@ -317,7 +319,120 @@ public class GyroBroncoVersion4 extends LinearOpMode {
     }
 
 
+    /**
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the opmode running.
 
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
+    public void gyroStrafe ( double speed,
+                            double distance,
+                            double angle) {
+
+        int     newLeftTarget;
+        int     newRightTarget;
+        int     newLeftBackTarget;
+        int     newRightBackTarget;
+        int     moveCounts;
+        double  max;
+        double  error;
+        double  steer;
+        double  leftFrontRightBackSpeed;
+        double  leftBackRightFrontSpeed;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            moveCounts = (int)(distance * COUNTS_PER_INCH);
+            newLeftTarget = front_left_motor.getCurrentPosition() + moveCounts;
+            newRightTarget = front_right_motor.getCurrentPosition() + moveCounts;
+            newLeftBackTarget = back_left_motor.getCurrentPosition() + moveCounts;
+            newRightBackTarget = back_right_motor.getCurrentPosition() + moveCounts;
+
+
+
+            // Set Target and Turn On RUN_TO_POSITION
+            front_left_motor.setTargetPosition(newLeftTarget);
+            front_right_motor.setTargetPosition(newRightTarget);
+            back_left_motor.setTargetPosition(-newLeftBackTarget);
+            back_right_motor.setTargetPosition(-newRightBackTarget);
+
+            front_left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            front_right_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            back_left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            back_right_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // start motion.
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            front_left_motor.setPower(speed);
+            front_right_motor.setPower(speed);
+            back_left_motor.setPower(speed);
+            back_right_motor.setPower(speed);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (front_left_motor.isBusy() && front_right_motor.isBusy())) {
+
+                // adjust relative speed based on heading error.
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    steer *= -1.0;
+
+                leftFrontRightBackSpeed = speed - steer;
+                leftBackRightFrontSpeed = speed + steer;
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                max = Math.max(Math.abs(leftFrontRightBackSpeed), Math.abs(leftBackRightFrontSpeed));
+                if (max > 1.0)
+                {
+                    leftFrontRightBackSpeed /= max;
+                    leftBackRightFrontSpeed /= max;
+                }
+
+//                robot.leftDrive.setPower(leftSpeed);
+//                robot.rightDrive.setPower(rightSpeed);
+                front_left_motor.setPower(leftFrontRightBackSpeed);
+                front_right_motor.setPower(leftBackRightFrontSpeed);
+                back_left_motor.setPower(leftBackRightFrontSpeed);
+                back_right_motor.setPower(leftFrontRightBackSpeed);
+
+                // Display drive status for the driver.
+                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
+                telemetry.addData("Actual",  "%7d:%7d",      front_left_motor.getCurrentPosition(),
+                        front_right_motor.getCurrentPosition());
+                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftFrontRightBackSpeed, leftBackRightFrontSpeed);
+                telemetry.update();
+            }
+
+            // Stop all motion;
+//            robot.leftDrive.setPower(0);
+//            robot.rightDrive.setPower(0);
+            front_left_motor.setPower(0);
+            front_right_motor.setPower(0);
+            back_left_motor.setPower(0);
+            back_right_motor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+//            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            front_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            front_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            back_left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            back_right_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
 
     /**
                              *  Method to spin on central axis to point in a new direction.

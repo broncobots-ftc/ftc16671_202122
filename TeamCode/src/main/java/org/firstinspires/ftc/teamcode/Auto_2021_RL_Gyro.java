@@ -57,8 +57,8 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
+    static final double     DRIVE_SPEED             = 0.5;//0.6
+    static final double     TURN_SPEED              = 0.3;//0.5
     //
     static final int oneRingMinHeight = 180;
     static final int oneRingMaxHeight = 240;
@@ -151,12 +151,42 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
                     mecanumDrive.runIntake(-1);
                     //running intake backwards to kick away element
                     //mecanumDrive.moveBackward(17.5, true, 5, 0.4, telemetry);//7, 5.6, 5.5, 5.4,5.3, 14
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, -58.0, 0.0, opModeIsActive(), telemetry);    // Drive back 24 inches
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -60.0, 0.0, opModeIsActive(), telemetry);    // Drive back 24 inches
 
                     //Strafe Right
                    //mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
                     sleep(250);
                     mecanumDrive.gyroTurn( TURN_SPEED, -130.0, opModeIsActive(), telemetry);         // Turn  CW to 90 Degrees
+                    mecanumDrive.runIntake(0);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -14, -130, opModeIsActive(), telemetry);    // Drive back 24 inches
+                    mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
+
+                    //Use dropping function
+                    sleep(1500);
+                    mecanumDrive.dumpAndBringbackBox();
+                    //back away from hub
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, 4, -130, opModeIsActive(), telemetry);
+                    //turning and driving towards to call
+                    mecanumDrive.gyroTurn( TURN_SPEED, -270.0, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -25, -270, opModeIsActive(), telemetry);
+                    //move lift down
+                    mecanumDrive.moveLiftUp(500, 0.4);
+
+                    mecanumDrive.gyroTurn( TURN_SPEED, -180.0, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -49, -180, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroTurn( TURN_SPEED, -270.0, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -5, -270, opModeIsActive(), telemetry);
+                    mecanumDrive.runCarousel(-0.4);
+                    sleep(4000);
+                    mecanumDrive.strafeLeft(-9, true, 5, 0.4, telemetry);//10
+                    mecanumDrive.moveBackward(2, true, 5, .4, telemetry);
+                    //mecanumDrive.gyroTurn( TURN_SPEED, -360.0, opModeIsActive(), telemetry);
+                    //mecanumDrive.gyroDrive(DRIVE_SPEED, -19, -360, opModeIsActive(), telemetry);
+                    //puting box back to floor to prepare for tele op
+                    mecanumDrive.box.setPosition(1);
+                    sleep(1200);
+                    mecanumDrive.moveLiftUp(0, 0.7); //was 0.4
+                    break;
 
 //                    mecanumDrive.rotateLeftSide(-9, true,5,0.4, telemetry);//-7.4, -8.1, -8.4
 //                    //Move backward (make sure to contact the shipping hub)
