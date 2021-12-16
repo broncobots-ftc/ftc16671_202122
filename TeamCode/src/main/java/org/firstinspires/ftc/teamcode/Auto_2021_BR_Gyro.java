@@ -158,27 +158,27 @@ public class Auto_2021_BR_Gyro extends LinearOpMode {
                     sleep(250);
                     mecanumDrive.runIntake(0);
                     mecanumDrive.gyroTurn( TURN_SPEED, 130.0, opModeIsActive(), telemetry);         // Turn  CW to 90 Degrees
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, -15.5, -130, opModeIsActive(), telemetry);    // Drive back 24 inches
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -15.5, 130, opModeIsActive(), telemetry);    // Drive back 24 inches
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
 
                     //Use dropping function
                     sleep(1500);
                     mecanumDrive.dumpAndBringbackBox();
                     //back away from hub
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, 4.5, -130, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, 4.5, 130, opModeIsActive(), telemetry);
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.4);
 
                     //turning and driving towards to wall
                     mecanumDrive.gyroTurn( TURN_SPEED, -90.0, opModeIsActive(), telemetry);
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, -25, -270, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -31, -90, opModeIsActive(), telemetry);
 
                     mecanumDrive.gyroTurn( TURN_SPEED, -180.0, opModeIsActive(), telemetry);
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, -48, -180, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -50, -180, opModeIsActive(), telemetry);
                     mecanumDrive.runCarousel(0.4); //opposite red direction
                     sleep(4000);
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, 22, 180, true, telemetry);//10
-                    mecanumDrive.strafeRight(5, true, 5, .4, telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, 21, 180, true, telemetry);//10
+                    mecanumDrive.strafeRight(4, true, 5, .4, telemetry);
                     //mecanumDrive.gyroTurn( TURN_SPEED, -360.0, opModeIsActive(), telemetry);
                     //mecanumDrive.gyroDrive(DRIVE_SPEED, -19, -360, opModeIsActive(), telemetry);
                     //puting box back to floor to prepare for tele op
