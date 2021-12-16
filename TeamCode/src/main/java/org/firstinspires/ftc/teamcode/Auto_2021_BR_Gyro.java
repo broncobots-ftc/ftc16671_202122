@@ -48,17 +48,17 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "Auto_2021_RL_Gyro", group = "ftc16671")
+@Autonomous(name = "Auto_2021_BR_Gyro", group = "ftc16671")
 
-public class Auto_2021_RL_Gyro extends LinearOpMode {
+public class Auto_2021_BR_Gyro extends LinearOpMode {
     /** This is for encoder **/
     static final double     COUNTS_PER_MOTOR_REV    = 500 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 19.2 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.5;//0.6
-    static final double     TURN_SPEED              = 0.3;//0.5
+    static final double     DRIVE_SPEED             = 0.5;//0.6, .5
+    static final double     TURN_SPEED              = 0.3;//0.5,.3
     //
     static final int oneRingMinHeight = 180;
     static final int oneRingMaxHeight = 240;
@@ -156,8 +156,8 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
                     //Strafe Right
                    //mecanumDrive.strafeLeft(-10, true, 5, 0.4, telemetry);
                     sleep(250);
-                    mecanumDrive.gyroTurn( TURN_SPEED, -130.0, opModeIsActive(), telemetry);         // Turn  CW to 90 Degrees
                     mecanumDrive.runIntake(0);
+                    mecanumDrive.gyroTurn( TURN_SPEED, 130.0, opModeIsActive(), telemetry);         // Turn  CW to 90 Degrees
                     mecanumDrive.gyroDrive(DRIVE_SPEED, -15.5, -130, opModeIsActive(), telemetry);    // Drive back 24 inches
                     mecanumDrive.moveLiftUp(mecanumDrive.getLiftHeight(level), 0.8);
 
@@ -166,20 +166,19 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
                     mecanumDrive.dumpAndBringbackBox();
                     //back away from hub
                     mecanumDrive.gyroDrive(DRIVE_SPEED, 4.5, -130, opModeIsActive(), telemetry);
-                    //turning and driving towards to call
-                    mecanumDrive.gyroTurn( TURN_SPEED, -270.0, opModeIsActive(), telemetry);
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, -25, -270, opModeIsActive(), telemetry);
                     //move lift down
                     mecanumDrive.moveLiftUp(500, 0.4);
 
+                    //turning and driving towards to wall
+                    mecanumDrive.gyroTurn( TURN_SPEED, -90.0, opModeIsActive(), telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, -25, -270, opModeIsActive(), telemetry);
+
                     mecanumDrive.gyroTurn( TURN_SPEED, -180.0, opModeIsActive(), telemetry);
                     mecanumDrive.gyroDrive(DRIVE_SPEED, -48, -180, opModeIsActive(), telemetry);
-                    mecanumDrive.gyroTurn( TURN_SPEED, -270.0, opModeIsActive(), telemetry);
-                    mecanumDrive.gyroDrive(DRIVE_SPEED, -5, -270, opModeIsActive(), telemetry);
-                    mecanumDrive.runCarousel(-0.4);
+                    mecanumDrive.runCarousel(0.4); //opposite red direction
                     sleep(4000);
-                    mecanumDrive.strafeLeft(-8, true, 5, 0.4, telemetry);//10
-                    mecanumDrive.moveBackward(2, true, 5, .4, telemetry);
+                    mecanumDrive.gyroDrive(DRIVE_SPEED, 22, 180, true, telemetry);//10
+                    mecanumDrive.strafeRight(5, true, 5, .4, telemetry);
                     //mecanumDrive.gyroTurn( TURN_SPEED, -360.0, opModeIsActive(), telemetry);
                     //mecanumDrive.gyroDrive(DRIVE_SPEED, -19, -360, opModeIsActive(), telemetry);
                     //puting box back to floor to prepare for tele op
