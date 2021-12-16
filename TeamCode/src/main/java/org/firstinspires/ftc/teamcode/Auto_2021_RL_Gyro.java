@@ -180,7 +180,7 @@ public class Auto_2021_RL_Gyro extends LinearOpMode {
                     sleep(4000);
                     mecanumDrive.strafeLeft(-8, true, 5, 0.4, telemetry);//10
                     mecanumDrive.moveBackward(2, true, 5, .4, telemetry);
-                    //mecanumDrive.gyroTurn( TURN_SPEED, -360.0, opModeIsActive(), telemetry);
+                    ///mecanumDrive.gyroTurn( TURN_SPEED, -360.0, opModeIsActive(), telemetry);
                     //mecanumDrive.gyroDrive(DRIVE_SPEED, -19, -360, opModeIsActive(), telemetry);
                     //puting box back to floor to prepare for tele op
                     mecanumDrive.box.setPosition(.97);
